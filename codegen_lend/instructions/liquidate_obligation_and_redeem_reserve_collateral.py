@@ -1,21 +1,20 @@
 from __future__ import annotations
 import typing
 from solders.pubkey import Pubkey
-from spl.token.constants import TOKEN_PROGRAM_ID
 from solders.instruction import Instruction, AccountMeta
 import borsh_construct as borsh
-from codegen_lend.program_id import PROGRAM_ID
+from ..program_id import PROGRAM_ID
 
 
 class LiquidateObligationAndRedeemReserveCollateralArgs(typing.TypedDict):
     liquidity_amount: int
-    min_acceptable_received_collateral_amount: int
+    min_acceptable_received_liquidity_amount: int
     max_allowed_ltv_override_percent: int
 
 
 layout = borsh.CStruct(
     "liquidity_amount" / borsh.U64,
-    "min_acceptable_received_collateral_amount" / borsh.U64,
+    "min_acceptable_received_liquidity_amount" / borsh.U64,
     "max_allowed_ltv_override_percent" / borsh.U64,
 )
 
@@ -26,8 +25,10 @@ class LiquidateObligationAndRedeemReserveCollateralAccounts(typing.TypedDict):
     lending_market: Pubkey
     lending_market_authority: Pubkey
     repay_reserve: Pubkey
+    repay_reserve_liquidity_mint: Pubkey
     repay_reserve_liquidity_supply: Pubkey
     withdraw_reserve: Pubkey
+    withdraw_reserve_liquidity_mint: Pubkey
     withdraw_reserve_collateral_mint: Pubkey
     withdraw_reserve_collateral_supply: Pubkey
     withdraw_reserve_liquidity_supply: Pubkey
@@ -35,6 +36,9 @@ class LiquidateObligationAndRedeemReserveCollateralAccounts(typing.TypedDict):
     user_source_liquidity: Pubkey
     user_destination_collateral: Pubkey
     user_destination_liquidity: Pubkey
+    collateral_token_program: Pubkey
+    repay_liquidity_token_program: Pubkey
+    withdraw_liquidity_token_program: Pubkey
     instruction_sysvar_account: Pubkey
 
 
@@ -59,12 +63,22 @@ def liquidate_obligation_and_redeem_reserve_collateral(
             pubkey=accounts["repay_reserve"], is_signer=False, is_writable=True
         ),
         AccountMeta(
+            pubkey=accounts["repay_reserve_liquidity_mint"],
+            is_signer=False,
+            is_writable=True,
+        ),
+        AccountMeta(
             pubkey=accounts["repay_reserve_liquidity_supply"],
             is_signer=False,
             is_writable=True,
         ),
         AccountMeta(
             pubkey=accounts["withdraw_reserve"], is_signer=False, is_writable=True
+        ),
+        AccountMeta(
+            pubkey=accounts["withdraw_reserve_liquidity_mint"],
+            is_signer=False,
+            is_writable=True,
         ),
         AccountMeta(
             pubkey=accounts["withdraw_reserve_collateral_mint"],
@@ -99,7 +113,21 @@ def liquidate_obligation_and_redeem_reserve_collateral(
             is_signer=False,
             is_writable=True,
         ),
-        AccountMeta(pubkey=TOKEN_PROGRAM_ID, is_signer=False, is_writable=False),
+        AccountMeta(
+            pubkey=accounts["collateral_token_program"],
+            is_signer=False,
+            is_writable=False,
+        ),
+        AccountMeta(
+            pubkey=accounts["repay_liquidity_token_program"],
+            is_signer=False,
+            is_writable=False,
+        ),
+        AccountMeta(
+            pubkey=accounts["withdraw_liquidity_token_program"],
+            is_signer=False,
+            is_writable=False,
+        ),
         AccountMeta(
             pubkey=accounts["instruction_sysvar_account"],
             is_signer=False,
@@ -112,8 +140,8 @@ def liquidate_obligation_and_redeem_reserve_collateral(
     encoded_args = layout.build(
         {
             "liquidity_amount": args["liquidity_amount"],
-            "min_acceptable_received_collateral_amount": args[
-                "min_acceptable_received_collateral_amount"
+            "min_acceptable_received_liquidity_amount": args[
+                "min_acceptable_received_liquidity_amount"
             ],
             "max_allowed_ltv_override_percent": args[
                 "max_allowed_ltv_override_percent"

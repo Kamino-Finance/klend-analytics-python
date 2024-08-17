@@ -617,16 +617,16 @@ class LastTimestampGreaterThanCurrent(ProgramError):
     msg = "The last interval start timestamp is greater than the current timestamp"
 
 
-class LiquidationSlippageError(ProgramError):
+class LiquidationRewardTooSmall(ProgramError):
     def __init__(self) -> None:
         super().__init__(
             6066,
-            "The reward amount is less than the minimum acceptable received collateral",
+            "The reward amount is less than the minimum acceptable received liquidity",
         )
 
     code = 6066
-    name = "LiquidationSlippageError"
-    msg = "The reward amount is less than the minimum acceptable received collateral"
+    name = "LiquidationRewardTooSmall"
+    msg = "The reward amount is less than the minimum acceptable received liquidity"
 
 
 class IsolatedAssetTierViolation(ProgramError):
@@ -792,6 +792,274 @@ class ReserveObsolete(ProgramError):
     msg = "Reserve is marked as obsolete"
 
 
+class ElevationGroupAlreadyActivated(ProgramError):
+    def __init__(self) -> None:
+        super().__init__(6083, "Obligation already part of the same elevation group")
+
+    code = 6083
+    name = "ElevationGroupAlreadyActivated"
+    msg = "Obligation already part of the same elevation group"
+
+
+class ObligationInDeprecatedReserve(ProgramError):
+    def __init__(self) -> None:
+        super().__init__(6084, "Obligation has a deposit in a deprecated reserve")
+
+    code = 6084
+    name = "ObligationInDeprecatedReserve"
+    msg = "Obligation has a deposit in a deprecated reserve"
+
+
+class ReferrerStateOwnerMismatch(ProgramError):
+    def __init__(self) -> None:
+        super().__init__(6085, "Referrer state owner does not match the given signer")
+
+    code = 6085
+    name = "ReferrerStateOwnerMismatch"
+    msg = "Referrer state owner does not match the given signer"
+
+
+class UserMetadataOwnerAlreadySet(ProgramError):
+    def __init__(self) -> None:
+        super().__init__(6086, "User metadata owner is already set")
+
+    code = 6086
+    name = "UserMetadataOwnerAlreadySet"
+    msg = "User metadata owner is already set"
+
+
+class CollateralNonLiquidatable(ProgramError):
+    def __init__(self) -> None:
+        super().__init__(6087, "This collateral cannot be liquidated (LTV set to 0)")
+
+    code = 6087
+    name = "CollateralNonLiquidatable"
+    msg = "This collateral cannot be liquidated (LTV set to 0)"
+
+
+class BorrowingDisabled(ProgramError):
+    def __init__(self) -> None:
+        super().__init__(6088, "Borrowing is disabled")
+
+    code = 6088
+    name = "BorrowingDisabled"
+    msg = "Borrowing is disabled"
+
+
+class BorrowLimitExceeded(ProgramError):
+    def __init__(self) -> None:
+        super().__init__(6089, "Cannot borrow above borrow limit")
+
+    code = 6089
+    name = "BorrowLimitExceeded"
+    msg = "Cannot borrow above borrow limit"
+
+
+class DepositLimitExceeded(ProgramError):
+    def __init__(self) -> None:
+        super().__init__(6090, "Cannot deposit above deposit limit")
+
+    code = 6090
+    name = "DepositLimitExceeded"
+    msg = "Cannot deposit above deposit limit"
+
+
+class BorrowingDisabledOutsideElevationGroup(ProgramError):
+    def __init__(self) -> None:
+        super().__init__(
+            6091, "Reserve does not accept any new borrows outside elevation group"
+        )
+
+    code = 6091
+    name = "BorrowingDisabledOutsideElevationGroup"
+    msg = "Reserve does not accept any new borrows outside elevation group"
+
+
+class NetValueRemainingTooSmall(ProgramError):
+    def __init__(self) -> None:
+        super().__init__(6092, "Net value remaining too small")
+
+    code = 6092
+    name = "NetValueRemainingTooSmall"
+    msg = "Net value remaining too small"
+
+
+class WorseLTVBlocked(ProgramError):
+    def __init__(self) -> None:
+        super().__init__(6093, "Cannot get the obligation in a worse position")
+
+    code = 6093
+    name = "WorseLTVBlocked"
+    msg = "Cannot get the obligation in a worse position"
+
+
+class LiabilitiesBiggerThanAssets(ProgramError):
+    def __init__(self) -> None:
+        super().__init__(6094, "Cannot have more liabilities than assets in a position")
+
+    code = 6094
+    name = "LiabilitiesBiggerThanAssets"
+    msg = "Cannot have more liabilities than assets in a position"
+
+
+class ReserveTokenBalanceMismatch(ProgramError):
+    def __init__(self) -> None:
+        super().__init__(6095, "Reserve state and token account cannot drift")
+
+    code = 6095
+    name = "ReserveTokenBalanceMismatch"
+    msg = "Reserve state and token account cannot drift"
+
+
+class ReserveVaultBalanceMismatch(ProgramError):
+    def __init__(self) -> None:
+        super().__init__(6096, "Reserve token account has been unexpectedly modified")
+
+    code = 6096
+    name = "ReserveVaultBalanceMismatch"
+    msg = "Reserve token account has been unexpectedly modified"
+
+
+class ReserveAccountingMismatch(ProgramError):
+    def __init__(self) -> None:
+        super().__init__(
+            6097, "Reserve internal state accounting has been unexpectedly modified"
+        )
+
+    code = 6097
+    name = "ReserveAccountingMismatch"
+    msg = "Reserve internal state accounting has been unexpectedly modified"
+
+
+class BorrowingAboveUtilizationRateDisabled(ProgramError):
+    def __init__(self) -> None:
+        super().__init__(6098, "Borrowing above set utilization rate is disabled")
+
+    code = 6098
+    name = "BorrowingAboveUtilizationRateDisabled"
+    msg = "Borrowing above set utilization rate is disabled"
+
+
+class LiquidationBorrowFactorPriority(ProgramError):
+    def __init__(self) -> None:
+        super().__init__(
+            6099, "Liquidation must prioritize the debt with the highest borrow factor"
+        )
+
+    code = 6099
+    name = "LiquidationBorrowFactorPriority"
+    msg = "Liquidation must prioritize the debt with the highest borrow factor"
+
+
+class LiquidationLowestLTVPriority(ProgramError):
+    def __init__(self) -> None:
+        super().__init__(
+            6100, "Liquidation must prioritize the collateral with the lowest LTV"
+        )
+
+    code = 6100
+    name = "LiquidationLowestLTVPriority"
+    msg = "Liquidation must prioritize the collateral with the lowest LTV"
+
+
+class ElevationGroupBorrowLimitExceeded(ProgramError):
+    def __init__(self) -> None:
+        super().__init__(6101, "Elevation group borrow limit exceeded")
+
+    code = 6101
+    name = "ElevationGroupBorrowLimitExceeded"
+    msg = "Elevation group borrow limit exceeded"
+
+
+class ElevationGroupWithoutDebtReserve(ProgramError):
+    def __init__(self) -> None:
+        super().__init__(
+            6102, "The elevation group does not have a debt reserve defined"
+        )
+
+    code = 6102
+    name = "ElevationGroupWithoutDebtReserve"
+    msg = "The elevation group does not have a debt reserve defined"
+
+
+class ElevationGroupMaxCollateralReserveZero(ProgramError):
+    def __init__(self) -> None:
+        super().__init__(
+            6103, "The elevation group does not allow any collateral reserves"
+        )
+
+    code = 6103
+    name = "ElevationGroupMaxCollateralReserveZero"
+    msg = "The elevation group does not allow any collateral reserves"
+
+
+class ElevationGroupHasAnotherDebtReserve(ProgramError):
+    def __init__(self) -> None:
+        super().__init__(
+            6104,
+            "In elevation group attempt to borrow from a reserve that is not the debt reserve",
+        )
+
+    code = 6104
+    name = "ElevationGroupHasAnotherDebtReserve"
+    msg = "In elevation group attempt to borrow from a reserve that is not the debt reserve"
+
+
+class ElevationGroupDebtReserveAsCollateral(ProgramError):
+    def __init__(self) -> None:
+        super().__init__(
+            6105,
+            "The elevation group's debt reserve cannot be used as a collateral reserve",
+        )
+
+    code = 6105
+    name = "ElevationGroupDebtReserveAsCollateral"
+    msg = "The elevation group's debt reserve cannot be used as a collateral reserve"
+
+
+class ObligationCollateralExceedsElevationGroupLimit(ProgramError):
+    def __init__(self) -> None:
+        super().__init__(
+            6106,
+            "Obligation have more collateral than the maximum allowed by the elevation group",
+        )
+
+    code = 6106
+    name = "ObligationCollateralExceedsElevationGroupLimit"
+    msg = "Obligation have more collateral than the maximum allowed by the elevation group"
+
+
+class ObligationElevationGroupMultipleDebtReserve(ProgramError):
+    def __init__(self) -> None:
+        super().__init__(
+            6107, "Obligation is an elevation group but have more than one debt reserve"
+        )
+
+    code = 6107
+    name = "ObligationElevationGroupMultipleDebtReserve"
+    msg = "Obligation is an elevation group but have more than one debt reserve"
+
+
+class UnsupportedTokenExtension(ProgramError):
+    def __init__(self) -> None:
+        super().__init__(
+            6108, "Mint has a token (2022) extension that is not supported"
+        )
+
+    code = 6108
+    name = "UnsupportedTokenExtension"
+    msg = "Mint has a token (2022) extension that is not supported"
+
+
+class InvalidTokenAccount(ProgramError):
+    def __init__(self) -> None:
+        super().__init__(6109, "Can't have an spl token mint with a t22 account")
+
+    code = 6109
+    name = "InvalidTokenAccount"
+    msg = "Can't have an spl token mint with a t22 account"
+
+
 CustomError = typing.Union[
     InvalidMarketAuthority,
     InvalidMarketOwner,
@@ -859,7 +1127,7 @@ CustomError = typing.Union[
     ObligationEmpty,
     WithdrawalCapReached,
     LastTimestampGreaterThanCurrent,
-    LiquidationSlippageError,
+    LiquidationRewardTooSmall,
     IsolatedAssetTierViolation,
     InconsistentElevationGroup,
     InvalidElevationGroup,
@@ -876,6 +1144,33 @@ CustomError = typing.Union[
     CpiDisabled,
     ShortUrlNotAsciiAlphanumeric,
     ReserveObsolete,
+    ElevationGroupAlreadyActivated,
+    ObligationInDeprecatedReserve,
+    ReferrerStateOwnerMismatch,
+    UserMetadataOwnerAlreadySet,
+    CollateralNonLiquidatable,
+    BorrowingDisabled,
+    BorrowLimitExceeded,
+    DepositLimitExceeded,
+    BorrowingDisabledOutsideElevationGroup,
+    NetValueRemainingTooSmall,
+    WorseLTVBlocked,
+    LiabilitiesBiggerThanAssets,
+    ReserveTokenBalanceMismatch,
+    ReserveVaultBalanceMismatch,
+    ReserveAccountingMismatch,
+    BorrowingAboveUtilizationRateDisabled,
+    LiquidationBorrowFactorPriority,
+    LiquidationLowestLTVPriority,
+    ElevationGroupBorrowLimitExceeded,
+    ElevationGroupWithoutDebtReserve,
+    ElevationGroupMaxCollateralReserveZero,
+    ElevationGroupHasAnotherDebtReserve,
+    ElevationGroupDebtReserveAsCollateral,
+    ObligationCollateralExceedsElevationGroupLimit,
+    ObligationElevationGroupMultipleDebtReserve,
+    UnsupportedTokenExtension,
+    InvalidTokenAccount,
 ]
 CUSTOM_ERROR_MAP: dict[int, CustomError] = {
     6000: InvalidMarketAuthority(),
@@ -944,7 +1239,7 @@ CUSTOM_ERROR_MAP: dict[int, CustomError] = {
     6063: ObligationEmpty(),
     6064: WithdrawalCapReached(),
     6065: LastTimestampGreaterThanCurrent(),
-    6066: LiquidationSlippageError(),
+    6066: LiquidationRewardTooSmall(),
     6067: IsolatedAssetTierViolation(),
     6068: InconsistentElevationGroup(),
     6069: InvalidElevationGroup(),
@@ -961,6 +1256,33 @@ CUSTOM_ERROR_MAP: dict[int, CustomError] = {
     6080: CpiDisabled(),
     6081: ShortUrlNotAsciiAlphanumeric(),
     6082: ReserveObsolete(),
+    6083: ElevationGroupAlreadyActivated(),
+    6084: ObligationInDeprecatedReserve(),
+    6085: ReferrerStateOwnerMismatch(),
+    6086: UserMetadataOwnerAlreadySet(),
+    6087: CollateralNonLiquidatable(),
+    6088: BorrowingDisabled(),
+    6089: BorrowLimitExceeded(),
+    6090: DepositLimitExceeded(),
+    6091: BorrowingDisabledOutsideElevationGroup(),
+    6092: NetValueRemainingTooSmall(),
+    6093: WorseLTVBlocked(),
+    6094: LiabilitiesBiggerThanAssets(),
+    6095: ReserveTokenBalanceMismatch(),
+    6096: ReserveVaultBalanceMismatch(),
+    6097: ReserveAccountingMismatch(),
+    6098: BorrowingAboveUtilizationRateDisabled(),
+    6099: LiquidationBorrowFactorPriority(),
+    6100: LiquidationLowestLTVPriority(),
+    6101: ElevationGroupBorrowLimitExceeded(),
+    6102: ElevationGroupWithoutDebtReserve(),
+    6103: ElevationGroupMaxCollateralReserveZero(),
+    6104: ElevationGroupHasAnotherDebtReserve(),
+    6105: ElevationGroupDebtReserveAsCollateral(),
+    6106: ObligationCollateralExceedsElevationGroupLimit(),
+    6107: ObligationElevationGroupMultipleDebtReserve(),
+    6108: UnsupportedTokenExtension(),
+    6109: InvalidTokenAccount(),
 }
 
 

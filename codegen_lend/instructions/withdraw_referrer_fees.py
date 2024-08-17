@@ -3,13 +3,14 @@ import typing
 from solders.pubkey import Pubkey
 from spl.token.constants import TOKEN_PROGRAM_ID
 from solders.instruction import Instruction, AccountMeta
-from codegen_lend.program_id import PROGRAM_ID
+from ..program_id import PROGRAM_ID
 
 
 class WithdrawReferrerFeesAccounts(typing.TypedDict):
     referrer: Pubkey
     referrer_token_state: Pubkey
     reserve: Pubkey
+    reserve_liquidity_mint: Pubkey
     reserve_supply_liquidity: Pubkey
     referrer_token_account: Pubkey
     lending_market: Pubkey
@@ -27,6 +28,9 @@ def withdraw_referrer_fees(
             pubkey=accounts["referrer_token_state"], is_signer=False, is_writable=True
         ),
         AccountMeta(pubkey=accounts["reserve"], is_signer=False, is_writable=True),
+        AccountMeta(
+            pubkey=accounts["reserve_liquidity_mint"], is_signer=False, is_writable=True
+        ),
         AccountMeta(
             pubkey=accounts["reserve_supply_liquidity"],
             is_signer=False,

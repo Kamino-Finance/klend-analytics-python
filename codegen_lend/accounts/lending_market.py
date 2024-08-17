@@ -8,24 +8,8 @@ from anchorpy.coder.accounts import ACCOUNT_DISCRIMINATOR_SIZE
 from anchorpy.error import AccountInvalidDiscriminator
 from anchorpy.utils.rpc import get_multiple_accounts
 from anchorpy.borsh_extension import BorshPubkey
-from codegen_lend.program_id import PROGRAM_ID
-import codegen_lend.lend_types as types
-
-# Changing this to work for release 1.6.2
-
-"""
-Changelog: 
-#adding
-autodeleverage_enabled: u8,
-borrow_disabled: u8,
-min_net_value_in_obligation_sf: u128,
-min_value_skip_liquidation_ltv_bf_checks: u64,
-
-#Changing
-min_full_liquidation_amount_threshold -> min_full_liquidation_value_threshold 
-padding1 -> 177
-remove reserved
-"""
+from ..program_id import PROGRAM_ID
+from .. import types
 
 
 class LendingMarketJSON(typing.TypedDict):
@@ -49,7 +33,6 @@ class LendingMarketJSON(typing.TypedDict):
     multiplier_points_tag_boost: list[int]
     elevation_groups: list[types.elevation_group.ElevationGroupJSON]
     elevation_group_padding: list[int]
-
     min_net_value_in_obligation_sf: int
     min_value_skip_liquidation_ltv_bf_checks: int
     padding1: list[int]

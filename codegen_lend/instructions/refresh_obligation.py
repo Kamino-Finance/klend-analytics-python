@@ -2,7 +2,7 @@ from __future__ import annotations
 import typing
 from solders.pubkey import Pubkey
 from solders.instruction import Instruction, AccountMeta
-from codegen_lend.program_id import PROGRAM_ID
+from ..program_id import PROGRAM_ID
 
 
 class RefreshObligationAccounts(typing.TypedDict):

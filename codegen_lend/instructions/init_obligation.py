@@ -3,11 +3,10 @@ import typing
 from solders.pubkey import Pubkey
 from solders.system_program import ID as SYS_PROGRAM_ID
 from solders.sysvar import RENT
-from spl.token.constants import TOKEN_PROGRAM_ID
 from solders.instruction import Instruction, AccountMeta
 import borsh_construct as borsh
-import codegen_lend.lend_types as types
-from codegen_lend.program_id import PROGRAM_ID
+from .. import types
+from ..program_id import PROGRAM_ID
 
 
 class InitObligationArgs(typing.TypedDict):
@@ -19,6 +18,7 @@ layout = borsh.CStruct("args" / types.init_obligation_args.InitObligationArgs.la
 
 class InitObligationAccounts(typing.TypedDict):
     obligation_owner: Pubkey
+    fee_payer: Pubkey
     obligation: Pubkey
     lending_market: Pubkey
     seed1_account: Pubkey
@@ -34,8 +34,9 @@ def init_obligation(
 ) -> Instruction:
     keys: list[AccountMeta] = [
         AccountMeta(
-            pubkey=accounts["obligation_owner"], is_signer=True, is_writable=True
+            pubkey=accounts["obligation_owner"], is_signer=True, is_writable=False
         ),
+        AccountMeta(pubkey=accounts["fee_payer"], is_signer=True, is_writable=True),
         AccountMeta(pubkey=accounts["obligation"], is_signer=False, is_writable=True),
         AccountMeta(
             pubkey=accounts["lending_market"], is_signer=False, is_writable=False
@@ -50,7 +51,6 @@ def init_obligation(
             pubkey=accounts["owner_user_metadata"], is_signer=False, is_writable=False
         ),
         AccountMeta(pubkey=RENT, is_signer=False, is_writable=False),
-        AccountMeta(pubkey=TOKEN_PROGRAM_ID, is_signer=False, is_writable=False),
         AccountMeta(pubkey=SYS_PROGRAM_ID, is_signer=False, is_writable=False),
     ]
     if remaining_accounts is not None:

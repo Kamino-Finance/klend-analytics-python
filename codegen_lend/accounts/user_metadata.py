@@ -8,16 +8,7 @@ from anchorpy.coder.accounts import ACCOUNT_DISCRIMINATOR_SIZE
 from anchorpy.error import AccountInvalidDiscriminator
 from anchorpy.utils.rpc import get_multiple_accounts
 from anchorpy.borsh_extension import BorshPubkey
-from codegen_lend.program_id import PROGRAM_ID
-
-# Change Log: Updating this to keep track with the update to Klend program release 1.6.2
-
-"""
-adding:
-owner: Pubkey,
-changing
-padding_1: 55 -> 51
-"""
+from ..program_id import PROGRAM_ID
 
 
 class UserMetadataJSON(typing.TypedDict):

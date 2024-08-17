@@ -3,15 +3,18 @@ import typing
 from solders.pubkey import Pubkey
 from solders.instruction import Instruction, AccountMeta
 import borsh_construct as borsh
-from codegen_lend.program_id import PROGRAM_ID
+from ..program_id import PROGRAM_ID
 
 
 class UpdateReserveConfigArgs(typing.TypedDict):
     mode: int
-    value: list[int]
+    value: bytes
+    skip_validation: bool
 
 
-layout = borsh.CStruct("mode" / borsh.U64, "value" / borsh.U8[648])
+layout = borsh.CStruct(
+    "mode" / borsh.U64, "value" / borsh.Bytes, "skip_validation" / borsh.Bool
+)
 
 
 class UpdateReserveConfigAccounts(typing.TypedDict):
@@ -42,6 +45,7 @@ def update_reserve_config(
         {
             "mode": args["mode"],
             "value": args["value"],
+            "skip_validation": args["skip_validation"],
         }
     )
     data = identifier + encoded_args

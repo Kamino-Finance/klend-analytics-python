@@ -8,19 +8,8 @@ from anchorpy.coder.accounts import ACCOUNT_DISCRIMINATOR_SIZE
 from anchorpy.error import AccountInvalidDiscriminator
 from anchorpy.utils.rpc import get_multiple_accounts
 from anchorpy.borsh_extension import BorshPubkey
-from codegen_lend.program_id import PROGRAM_ID
-import codegen_lend.lend_types as types
-
-# Updating for release 1.6.2
-
-"""
-Changelog
-Added:
-num_of_obsolete_reserves
-has_debt
-borrowing_disabled
-highest_borrow_factor_pct
-"""
+from ..program_id import PROGRAM_ID
+from .. import types
 
 
 class ObligationJSON(typing.TypedDict):
@@ -29,15 +18,13 @@ class ObligationJSON(typing.TypedDict):
     lending_market: str
     owner: str
     deposits: list[types.obligation_collateral.ObligationCollateralJSON]
-    lowest_reserve_deposit_ltv: int
+    lowest_reserve_deposit_liquidation_ltv: int
     deposited_value_sf: int
-
     borrows: list[types.obligation_liquidity.ObligationLiquidityJSON]
     borrow_factor_adjusted_debt_value_sf: int
     borrowed_assets_market_value_sf: int
     allowed_borrow_value_sf: int
     unhealthy_borrow_value_sf: int
-
     deposits_asset_tiers: list[int]
     borrows_asset_tiers: list[int]
     elevation_group: int
@@ -82,18 +69,15 @@ class Obligation:
     lending_market: Pubkey
     owner: Pubkey
     deposits: list[types.obligation_collateral.ObligationCollateral]
-    lowest_reserve_deposit_ltv: int
+    lowest_reserve_deposit_liquidation_ltv: int
     deposited_value_sf: int
-
     borrows: list[types.obligation_liquidity.ObligationLiquidity]
     borrow_factor_adjusted_debt_value_sf: int
     borrowed_assets_market_value_sf: int
     allowed_borrow_value_sf: int
     unhealthy_borrow_value_sf: int
-
     deposits_asset_tiers: list[int]
     borrows_asset_tiers: list[int]
-
     elevation_group: int
     num_of_obsolete_reserves: int
     has_debt: int
@@ -159,7 +143,7 @@ class Obligation:
                     dec.deposits,
                 )
             ),
-            lowest_reserve_deposit_ltv=dec.lowest_reserve_deposit_ltv,
+            lowest_reserve_deposit_liquidation_ltv=dec.lowest_reserve_deposit_liquidation_ltv,
             deposited_value_sf=dec.deposited_value_sf,
             borrows=list(
                 map(
@@ -192,7 +176,7 @@ class Obligation:
             "lending_market": str(self.lending_market),
             "owner": str(self.owner),
             "deposits": list(map(lambda item: item.to_json(), self.deposits)),
-            "lowest_reserve_deposit_ltv": self.lowest_reserve_deposit_ltv,
+            "lowest_reserve_deposit_liquidation_ltv": self.lowest_reserve_deposit_liquidation_ltv,
             "deposited_value_sf": self.deposited_value_sf,
             "borrows": list(map(lambda item: item.to_json(), self.borrows)),
             "borrow_factor_adjusted_debt_value_sf": self.borrow_factor_adjusted_debt_value_sf,
@@ -226,7 +210,9 @@ class Obligation:
                     obj["deposits"],
                 )
             ),
-            lowest_reserve_deposit_ltv=obj["lowest_reserve_deposit_ltv"],
+            lowest_reserve_deposit_liquidation_ltv=obj[
+                "lowest_reserve_deposit_liquidation_ltv"
+            ],
             deposited_value_sf=obj["deposited_value_sf"],
             borrows=list(
                 map(

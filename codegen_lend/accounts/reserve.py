@@ -8,48 +8,30 @@ from anchorpy.coder.accounts import ACCOUNT_DISCRIMINATOR_SIZE
 from anchorpy.error import AccountInvalidDiscriminator
 from anchorpy.utils.rpc import get_multiple_accounts
 from anchorpy.borsh_extension import BorshPubkey
-from codegen_lend.program_id import PROGRAM_ID
-import codegen_lend.lend_types as types
-
-# Changing this to adapt to Release 1.6.2
-
-"""
-Added
-borrowed_amount_outside_elevation_group
-borrowed_amounts_against_this_reserve_in_elevation_groups
-changing padding length
-"""
+from ..program_id import PROGRAM_ID
+from .. import types
 
 
-# Done
-# TODO: check
 class ReserveJSON(typing.TypedDict):
     version: int
     last_update: types.last_update.LastUpdateJSON
     lending_market: str
-
     farm_collateral: str
     farm_debt: str
-
     liquidity: types.reserve_liquidity.ReserveLiquidityJSON
     reserve_liquidity_padding: list[int]
-
     collateral: types.reserve_collateral.ReserveCollateralJSON
     reserve_collateral_padding: list[int]
-
     config: types.reserve_config.ReserveConfigJSON
     config_padding: list[int]
-
     borrowed_amount_outside_elevation_group: int
-    borrowed_amounts_against_this_reserve_in_elevation_groups: int
-
+    borrowed_amounts_against_this_reserve_in_elevation_groups: list[int]
     padding: list[int]
 
 
 @dataclass
 class Reserve:
     discriminator: typing.ClassVar = b"+\xf2\xcc\xca\x1a\xf7;\x7f"
-
     layout: typing.ClassVar = borsh.CStruct(
         "version" / borsh.U64,
         "last_update" / types.last_update.LastUpdate.layout,

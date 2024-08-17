@@ -8,13 +8,7 @@ from anchorpy.coder.accounts import ACCOUNT_DISCRIMINATOR_SIZE
 from anchorpy.error import AccountInvalidDiscriminator
 from anchorpy.utils.rpc import get_multiple_accounts
 from anchorpy.borsh_extension import BorshPubkey
-from codegen_lend.program_id import PROGRAM_ID
-
-# Change Log: Updating this to keep track with the update to Klend program release 1.6.2
-
-"""
-owner: Pubkey,
-"""
+from ..program_id import PROGRAM_ID
 
 
 class ReferrerStateJSON(typing.TypedDict):
@@ -74,10 +68,16 @@ class ReferrerState:
                 "The discriminator for this account is invalid"
             )
         dec = ReferrerState.layout.parse(data[ACCOUNT_DISCRIMINATOR_SIZE:])
-        return cls(short_url=dec.short_url, owner=dec.owner)
+        return cls(
+            short_url=dec.short_url,
+            owner=dec.owner,
+        )
 
     def to_json(self) -> ReferrerStateJSON:
-        return {"short_url": str(self.short_url), "owner": str(self.owner)}
+        return {
+            "short_url": str(self.short_url),
+            "owner": str(self.owner),
+        }
 
     @classmethod
     def from_json(cls, obj: ReferrerStateJSON) -> "ReferrerState":

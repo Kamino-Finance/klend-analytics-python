@@ -8,10 +8,7 @@ from anchorpy.coder.accounts import ACCOUNT_DISCRIMINATOR_SIZE
 from anchorpy.error import AccountInvalidDiscriminator
 from anchorpy.utils.rpc import get_multiple_accounts
 from anchorpy.borsh_extension import BorshPubkey
-from codegen_lend.program_id import PROGRAM_ID
-
-# Changing this to adapt to Release 1.6.2
-# Nothing changed
+from ..program_id import PROGRAM_ID
 
 
 class ReferrerTokenStateJSON(typing.TypedDict):

@@ -4,7 +4,7 @@ from solders.pubkey import Pubkey
 from solders.system_program import ID as SYS_PROGRAM_ID
 from solders.sysvar import RENT
 from solders.instruction import Instruction, AccountMeta
-from codegen_lend.program_id import PROGRAM_ID
+from ..program_id import PROGRAM_ID
 
 
 class DeleteReferrerStateAndShortUrlAccounts(typing.TypedDict):
