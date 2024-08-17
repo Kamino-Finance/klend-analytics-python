@@ -9,7 +9,16 @@ from solders.pubkey import Pubkey
 from anchorpy.borsh_extension import BorshPubkey
 import borsh_construct as borsh
 
+# Adapted to release 1.6.2
 
+"""
+borrowed_amount_outside_elevation_groups: u64
+
+padding2 -> 8 to 7
+"""
+
+
+# Done
 class ObligationLiquidityJSON(typing.TypedDict):
     borrow_reserve: str
     cumulative_borrow_rate_bsf: big_fraction_bytes.BigFractionBytesJSON
@@ -17,6 +26,7 @@ class ObligationLiquidityJSON(typing.TypedDict):
     borrowed_amount_sf: int
     market_value_sf: int
     borrow_factor_adjusted_market_value_sf: int
+    borrowed_amount_outside_elevation_groups: int
     padding2: list[int]
 
 
@@ -29,14 +39,17 @@ class ObligationLiquidity:
         "borrowed_amount_sf" / borsh.U128,
         "market_value_sf" / borsh.U128,
         "borrow_factor_adjusted_market_value_sf" / borsh.U128,
-        "padding2" / borsh.U64[8],
+        "borrowed_amount_outside_elevation_groups" / borsh.U64,
+        "padding2" / borsh.U64[7],
     )
+
     borrow_reserve: Pubkey
     cumulative_borrow_rate_bsf: big_fraction_bytes.BigFractionBytes
     padding: int
     borrowed_amount_sf: int
     market_value_sf: int
     borrow_factor_adjusted_market_value_sf: int
+    borrowed_amount_outside_elevation_groups: int
     padding2: list[int]
 
     @classmethod
@@ -50,6 +63,7 @@ class ObligationLiquidity:
             borrowed_amount_sf=obj.borrowed_amount_sf,
             market_value_sf=obj.market_value_sf,
             borrow_factor_adjusted_market_value_sf=obj.borrow_factor_adjusted_market_value_sf,
+            borrowed_amount_outside_elevation_groups=obj.borrowed_amount_outside_elevation_groups,
             padding2=obj.padding2,
         )
 
@@ -61,6 +75,7 @@ class ObligationLiquidity:
             "borrowed_amount_sf": self.borrowed_amount_sf,
             "market_value_sf": self.market_value_sf,
             "borrow_factor_adjusted_market_value_sf": self.borrow_factor_adjusted_market_value_sf,
+            "borrowed_amount_outside_elevation_groups": self.borrowed_amount_outside_elevation_groups,
             "padding2": self.padding2,
         }
 
@@ -72,6 +87,7 @@ class ObligationLiquidity:
             "borrowed_amount_sf": self.borrowed_amount_sf,
             "market_value_sf": self.market_value_sf,
             "borrow_factor_adjusted_market_value_sf": self.borrow_factor_adjusted_market_value_sf,
+            "borrowed_amount_outside_elevation_groups": self.borrowed_amount_outside_elevation_groups,
             "padding2": self.padding2,
         }
 
@@ -87,6 +103,9 @@ class ObligationLiquidity:
             market_value_sf=obj["market_value_sf"],
             borrow_factor_adjusted_market_value_sf=obj[
                 "borrow_factor_adjusted_market_value_sf"
+            ],
+            borrowed_amount_outside_elevation_groups=obj[
+                "borrowed_amount_outside_elevation_groups"
             ],
             padding2=obj["padding2"],
         )

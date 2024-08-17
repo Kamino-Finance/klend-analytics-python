@@ -10,6 +10,15 @@ from anchorpy.borsh_extension import BorshPubkey
 import borsh_construct as borsh
 
 
+# Adapted to release 1.6.2
+
+
+"""
+Adding token program
+padding2 -> 55 to 51
+"""
+
+
 class ReserveLiquidityJSON(typing.TypedDict):
     mint_pubkey: str
     supply_vault: str
@@ -26,6 +35,7 @@ class ReserveLiquidityJSON(typing.TypedDict):
     accumulated_referrer_fees_sf: int
     pending_referrer_fees_sf: int
     absolute_referral_rate_sf: int
+    token_program: str
     padding2: list[int]
     padding3: list[int]
 
@@ -48,7 +58,8 @@ class ReserveLiquidity:
         "accumulated_referrer_fees_sf" / borsh.U128,
         "pending_referrer_fees_sf" / borsh.U128,
         "absolute_referral_rate_sf" / borsh.U128,
-        "padding2" / borsh.U64[55],
+        "token_program" / BorshPubkey,
+        "padding2" / borsh.U64[51],
         "padding3" / borsh.U128[32],
     )
     mint_pubkey: Pubkey
@@ -66,6 +77,7 @@ class ReserveLiquidity:
     accumulated_referrer_fees_sf: int
     pending_referrer_fees_sf: int
     absolute_referral_rate_sf: int
+    token_program: Pubkey
     padding2: list[int]
     padding3: list[int]
 
@@ -89,6 +101,7 @@ class ReserveLiquidity:
             accumulated_referrer_fees_sf=obj.accumulated_referrer_fees_sf,
             pending_referrer_fees_sf=obj.pending_referrer_fees_sf,
             absolute_referral_rate_sf=obj.absolute_referral_rate_sf,
+            token_program=obj.token_program,
             padding2=obj.padding2,
             padding3=obj.padding3,
         )
@@ -110,6 +123,7 @@ class ReserveLiquidity:
             "accumulated_referrer_fees_sf": self.accumulated_referrer_fees_sf,
             "pending_referrer_fees_sf": self.pending_referrer_fees_sf,
             "absolute_referral_rate_sf": self.absolute_referral_rate_sf,
+            "token_program": self.token_program,
             "padding2": self.padding2,
             "padding3": self.padding3,
         }
@@ -131,6 +145,7 @@ class ReserveLiquidity:
             "accumulated_referrer_fees_sf": self.accumulated_referrer_fees_sf,
             "pending_referrer_fees_sf": self.pending_referrer_fees_sf,
             "absolute_referral_rate_sf": self.absolute_referral_rate_sf,
+            "token_program": self.token_program,
             "padding2": self.padding2,
             "padding3": self.padding3,
         }
@@ -155,6 +170,7 @@ class ReserveLiquidity:
             accumulated_referrer_fees_sf=obj["accumulated_referrer_fees_sf"],
             pending_referrer_fees_sf=obj["pending_referrer_fees_sf"],
             absolute_referral_rate_sf=obj["absolute_referral_rate_sf"],
+            token_program=obj["token_program"],
             padding2=obj["padding2"],
             padding3=obj["padding3"],
         )

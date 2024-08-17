@@ -4,6 +4,9 @@ from dataclasses import dataclass
 from anchorpy.borsh_extension import EnumForCodegen
 import borsh_construct as borsh
 
+# Release 1.6.2
+# No change
+
 
 class ExclusiveJSON(typing.TypedDict):
     kind: typing.Literal["Exclusive"]

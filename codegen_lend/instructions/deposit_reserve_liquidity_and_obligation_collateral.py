@@ -1,10 +1,9 @@
 from __future__ import annotations
 import typing
 from solders.pubkey import Pubkey
-from spl.token.constants import TOKEN_PROGRAM_ID
 from solders.instruction import Instruction, AccountMeta
 import borsh_construct as borsh
-from codegen_lend.program_id import PROGRAM_ID
+from ..program_id import PROGRAM_ID
 
 
 class DepositReserveLiquidityAndObligationCollateralArgs(typing.TypedDict):
@@ -20,11 +19,14 @@ class DepositReserveLiquidityAndObligationCollateralAccounts(typing.TypedDict):
     lending_market: Pubkey
     lending_market_authority: Pubkey
     reserve: Pubkey
+    reserve_liquidity_mint: Pubkey
     reserve_liquidity_supply: Pubkey
     reserve_collateral_mint: Pubkey
     reserve_destination_deposit_collateral: Pubkey
     user_source_liquidity: Pubkey
-    user_destination_collateral: Pubkey
+    placeholder_user_destination_collateral: typing.Optional[Pubkey]
+    collateral_token_program: Pubkey
+    liquidity_token_program: Pubkey
     instruction_sysvar_account: Pubkey
 
 
@@ -47,6 +49,9 @@ def deposit_reserve_liquidity_and_obligation_collateral(
         ),
         AccountMeta(pubkey=accounts["reserve"], is_signer=False, is_writable=True),
         AccountMeta(
+            pubkey=accounts["reserve_liquidity_mint"], is_signer=False, is_writable=True
+        ),
+        AccountMeta(
             pubkey=accounts["reserve_liquidity_supply"],
             is_signer=False,
             is_writable=True,
@@ -64,12 +69,25 @@ def deposit_reserve_liquidity_and_obligation_collateral(
         AccountMeta(
             pubkey=accounts["user_source_liquidity"], is_signer=False, is_writable=True
         ),
-        AccountMeta(
-            pubkey=accounts["user_destination_collateral"],
-            is_signer=False,
-            is_writable=True,
+        (
+            AccountMeta(
+                pubkey=accounts["placeholder_user_destination_collateral"],
+                is_signer=False,
+                is_writable=False,
+            )
+            if accounts["placeholder_user_destination_collateral"]
+            else AccountMeta(pubkey=program_id, is_signer=False, is_writable=False)
         ),
-        AccountMeta(pubkey=TOKEN_PROGRAM_ID, is_signer=False, is_writable=False),
+        AccountMeta(
+            pubkey=accounts["collateral_token_program"],
+            is_signer=False,
+            is_writable=False,
+        ),
+        AccountMeta(
+            pubkey=accounts["liquidity_token_program"],
+            is_signer=False,
+            is_writable=False,
+        ),
         AccountMeta(
             pubkey=accounts["instruction_sysvar_account"],
             is_signer=False,

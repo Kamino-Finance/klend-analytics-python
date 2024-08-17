@@ -4,7 +4,7 @@ from solders.pubkey import Pubkey
 from spl.token.constants import TOKEN_PROGRAM_ID
 from solders.instruction import Instruction, AccountMeta
 import borsh_construct as borsh
-from codegen_lend.program_id import PROGRAM_ID
+from ..program_id import PROGRAM_ID
 
 
 class BorrowObligationLiquidityArgs(typing.TypedDict):
@@ -20,10 +20,11 @@ class BorrowObligationLiquidityAccounts(typing.TypedDict):
     lending_market: Pubkey
     lending_market_authority: Pubkey
     borrow_reserve: Pubkey
+    borrow_reserve_liquidity_mint: Pubkey
     reserve_source_liquidity: Pubkey
     borrow_reserve_liquidity_fee_receiver: Pubkey
     user_destination_liquidity: Pubkey
-    referrer_token_state: Pubkey
+    referrer_token_state: typing.Optional[Pubkey]
     instruction_sysvar_account: Pubkey
 
 
@@ -48,6 +49,11 @@ def borrow_obligation_liquidity(
             pubkey=accounts["borrow_reserve"], is_signer=False, is_writable=True
         ),
         AccountMeta(
+            pubkey=accounts["borrow_reserve_liquidity_mint"],
+            is_signer=False,
+            is_writable=True,
+        ),
+        AccountMeta(
             pubkey=accounts["reserve_source_liquidity"],
             is_signer=False,
             is_writable=True,
@@ -62,8 +68,14 @@ def borrow_obligation_liquidity(
             is_signer=False,
             is_writable=True,
         ),
-        AccountMeta(
-            pubkey=accounts["referrer_token_state"], is_signer=False, is_writable=True
+        (
+            AccountMeta(
+                pubkey=accounts["referrer_token_state"],
+                is_signer=False,
+                is_writable=True,
+            )
+            if accounts["referrer_token_state"]
+            else AccountMeta(pubkey=program_id, is_signer=False, is_writable=False)
         ),
         AccountMeta(pubkey=TOKEN_PROGRAM_ID, is_signer=False, is_writable=False),
         AccountMeta(

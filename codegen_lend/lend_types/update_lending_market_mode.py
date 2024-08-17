@@ -5,6 +5,10 @@ from anchorpy.borsh_extension import EnumForCodegen
 import borsh_construct as borsh
 
 
+# Adapted to release 1.6.2
+# Adding values
+
+
 class UpdateOwnerJSON(typing.TypedDict):
     kind: typing.Literal["UpdateOwner"]
 
@@ -55,6 +59,22 @@ class UpdateMultiplierPointsJSON(typing.TypedDict):
 
 class UpdatePriceRefreshTriggerToMaxAgePctJSON(typing.TypedDict):
     kind: typing.Literal["UpdatePriceRefreshTriggerToMaxAgePct"]
+
+
+class UpdateAutodeleverageEnabledJSON(typing.TypedDict):
+    kind: typing.Literal["UpdateAutodeleverageEnabled"]
+
+
+class UpdateBorrowingDisabledJSON(typing.TypedDict):
+    kind: typing.Literal["UpdateBorrowingDisabled"]
+
+
+class UpdateMinNetValueObligationPostActionJSON(typing.TypedDict):
+    kind: typing.Literal["UpdateMinNetValueObligationPostAction"]
+
+
+class UpdateMinValueSkipPriorityLiqCheckJSON(typing.TypedDict):
+    kind: typing.Literal["UpdateMinValueSkipPriorityLiqCheck"]
 
 
 @dataclass
@@ -291,6 +311,66 @@ class UpdatePriceRefreshTriggerToMaxAgePct:
         }
 
 
+@dataclass
+class UpdateAutodeleverageEnabled:
+    discriminator: typing.ClassVar = 13
+    kind: typing.ClassVar = "UpdateAutodeleverageEnabled"
+
+    @classmethod
+    def to_json(cls) -> UpdateAutodeleverageEnabledJSON:
+        return UpdateAutodeleverageEnabledJSON(
+            kind="UpdateAutodeleverageEnabled",
+        )
+
+    def to_encodable(self) -> dict:
+        return {"UpdateAutodeleverageEnabled": {}}
+
+
+@dataclass
+class UpdateBorrowingDisabled:
+    discriminator: typing.ClassVar = 14
+    kind: typing.ClassVar = "UpdateBorrowingDisabled"
+
+    @classmethod
+    def to_json(cls) -> UpdateBorrowingDisabledJSON:
+        return UpdateBorrowingDisabledJSON(
+            kind="UpdateBorrowingDisabled",
+        )
+
+    def to_encodable(self) -> dict:
+        return {"UpdateBorrowingDisabled": {}}
+
+
+@dataclass
+class UpdateMinNetValueObligationPostAction:
+    discriminator: typing.ClassVar = 15
+    kind: typing.ClassVar = "UpdateMinNetValueObligationPostAction"
+
+    @classmethod
+    def to_json(cls) -> UpdateMinNetValueObligationPostActionJSON:
+        return UpdateMinNetValueObligationPostActionJSON(
+            kind="UpdateMinNetValueObligationPostAction",
+        )
+
+    def to_encodable(self) -> dict:
+        return {"UpdateMinNetValueObligationPostAction": {}}
+
+
+@dataclass
+class UpdateMinValueSkipPriorityLiqCheck:
+    discriminator: typing.ClassVar = 16
+    kind: typing.ClassVar = "UpdateMinValueSkipPriorityLiqCheck"
+
+    @classmethod
+    def to_json(cls) -> UpdateMinValueSkipPriorityLiqCheckJSON:
+        return UpdateMinValueSkipPriorityLiqCheckJSON(
+            kind="UpdateMinValueSkipPriorityLiqCheck",
+        )
+
+    def to_encodable(self) -> dict:
+        return {"UpdateMinValueSkipPriorityLiqCheck": {}}
+
+
 UpdateLendingMarketModeKind = typing.Union[
     UpdateOwner,
     UpdateEmergencyMode,
@@ -352,6 +432,14 @@ def from_decoded(obj: dict) -> UpdateLendingMarketModeKind:
         return UpdateMultiplierPoints()
     if "UpdatePriceRefreshTriggerToMaxAgePct" in obj:
         return UpdatePriceRefreshTriggerToMaxAgePct()
+    if "UpdateAutodeleverageEnabled" in obj:
+        return UpdateAutodeleverageEnabled()
+    if "UpdateBorrowingDisabled" in obj:
+        return UpdateBorrowingDisabled()
+    if "UpdateMinNetValueObligationPostAction" in obj:
+        return UpdateMinNetValueObligationPostAction()
+    if "UpdateMinValueSkipPriorityLiqCheck" in obj:
+        return UpdateMinValueSkipPriorityLiqCheck()
     raise ValueError("Invalid enum object")
 
 
@@ -382,8 +470,15 @@ def from_json(obj: UpdateLendingMarketModeJSON) -> UpdateLendingMarketModeKind:
         return UpdateMultiplierPoints()
     if obj["kind"] == "UpdatePriceRefreshTriggerToMaxAgePct":
         return UpdatePriceRefreshTriggerToMaxAgePct()
-    kind = obj["kind"]
-    raise ValueError(f"Unrecognized enum kind: {kind}")
+    if obj["kind"] == "UpdateAutodeleverageEnabled":
+        return UpdateAutodeleverageEnabled()
+    if obj["kind"] == "UpdateBorrowingDisabled":
+        return UpdateBorrowingDisabled()
+    if obj["kind"] == "UpdateMinNetValueObligationPostAction":
+        return UpdateMinNetValueObligationPostAction()
+    if obj["kind"] == "UpdateMinValueSkipPriorityLiqCheck":
+        return UpdateMinValueSkipPriorityLiqCheck()
+    raise ValueError(f"Unrecognized enum kind: {obj["kind"]}")
 
 
 layout = EnumForCodegen(
@@ -400,4 +495,8 @@ layout = EnumForCodegen(
     "UpdateReferralFeeBps" / borsh.CStruct(),
     "UpdateMultiplierPoints" / borsh.CStruct(),
     "UpdatePriceRefreshTriggerToMaxAgePct" / borsh.CStruct(),
+    "UpdateAutodeleverageEnabled" / borsh.CStruct(),
+    "UpdateBorrowingDisabled" / borsh.CStruct(),
+    "UpdateMinNetValueObligationPostAction" / borsh.CStruct(),
+    "UpdateMinValueSkipPriorityLiqCheck" / borsh.CStruct(),
 )

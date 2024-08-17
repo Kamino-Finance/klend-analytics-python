@@ -1,10 +1,9 @@
 from __future__ import annotations
 import typing
 from solders.pubkey import Pubkey
-from spl.token.constants import TOKEN_PROGRAM_ID
 from solders.instruction import Instruction, AccountMeta
 import borsh_construct as borsh
-from codegen_lend.program_id import PROGRAM_ID
+from ..program_id import PROGRAM_ID
 
 
 class RedeemReserveCollateralArgs(typing.TypedDict):
@@ -19,10 +18,14 @@ class RedeemReserveCollateralAccounts(typing.TypedDict):
     lending_market: Pubkey
     reserve: Pubkey
     lending_market_authority: Pubkey
+    reserve_liquidity_mint: Pubkey
     reserve_collateral_mint: Pubkey
     reserve_liquidity_supply: Pubkey
     user_source_collateral: Pubkey
     user_destination_liquidity: Pubkey
+    collateral_token_program: Pubkey
+    liquidity_token_program: Pubkey
+    instruction_sysvar_account: Pubkey
 
 
 def redeem_reserve_collateral(
@@ -43,6 +46,9 @@ def redeem_reserve_collateral(
             is_writable=False,
         ),
         AccountMeta(
+            pubkey=accounts["reserve_liquidity_mint"], is_signer=False, is_writable=True
+        ),
+        AccountMeta(
             pubkey=accounts["reserve_collateral_mint"],
             is_signer=False,
             is_writable=True,
@@ -60,7 +66,21 @@ def redeem_reserve_collateral(
             is_signer=False,
             is_writable=True,
         ),
-        AccountMeta(pubkey=TOKEN_PROGRAM_ID, is_signer=False, is_writable=False),
+        AccountMeta(
+            pubkey=accounts["collateral_token_program"],
+            is_signer=False,
+            is_writable=False,
+        ),
+        AccountMeta(
+            pubkey=accounts["liquidity_token_program"],
+            is_signer=False,
+            is_writable=False,
+        ),
+        AccountMeta(
+            pubkey=accounts["instruction_sysvar_account"],
+            is_signer=False,
+            is_writable=False,
+        ),
     ]
     if remaining_accounts is not None:
         keys += remaining_accounts

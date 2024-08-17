@@ -5,12 +5,20 @@ from anchorpy.borsh_extension import EnumForCodegen
 import borsh_construct as borsh
 
 
+# Adapted for release 1.6.2
+# Adding Hidden
+
+
 class ActiveJSON(typing.TypedDict):
     kind: typing.Literal["Active"]
 
 
 class ObsoleteJSON(typing.TypedDict):
     kind: typing.Literal["Obsolete"]
+
+
+class HiddenJSON(typing.TypedDict):
+    kind: typing.Literal["Hidden"]
 
 
 @dataclass
@@ -49,8 +57,26 @@ class Obsolete:
         }
 
 
-ReserveStatusKind = typing.Union[Active, Obsolete]
-ReserveStatusJSON = typing.Union[ActiveJSON, ObsoleteJSON]
+@dataclass
+class Hidden:
+    discriminator: typing.ClassVar = 2
+    kind: typing.ClassVar = "Hidden"
+
+    @classmethod
+    def to_json(cls) -> ObsoleteJSON:
+        return ObsoleteJSON(
+            kind="Hidden",
+        )
+
+    @classmethod
+    def to_encodable(cls) -> dict:
+        return {
+            "Hidden": {},
+        }
+
+
+ReserveStatusKind = typing.Union[Active, Obsolete, Hidden]
+ReserveStatusJSON = typing.Union[ActiveJSON, ObsoleteJSON, HiddenJSON]
 
 
 def from_decoded(obj: dict) -> ReserveStatusKind:
@@ -60,6 +86,8 @@ def from_decoded(obj: dict) -> ReserveStatusKind:
         return Active()
     if "Obsolete" in obj:
         return Obsolete()
+    if "Hidden" in obj:
+        return Hidden()
     raise ValueError("Invalid enum object")
 
 
@@ -68,8 +96,13 @@ def from_json(obj: ReserveStatusJSON) -> ReserveStatusKind:
         return Active()
     if obj["kind"] == "Obsolete":
         return Obsolete()
-    kind = obj["kind"]
-    raise ValueError(f"Unrecognized enum kind: {kind}")
+    if obk["kind"] == "Hidden":
+        return Hidden()
+    raise ValueError(f"Unrecognized enum kind: {obj["kind"]}")
 
 
-layout = EnumForCodegen("Active" / borsh.CStruct(), "Obsolete" / borsh.CStruct())
+layout = EnumForCodegen(
+    "Active" / borsh.CStruct(),
+    "Obsolete" / borsh.CStruct(),
+    "Hidden" / borsh.CStruct(),
+)

@@ -11,10 +11,24 @@ from construct import Container
 import borsh_construct as borsh
 
 
+# Adapted for release 1.6.2
+
+"""
+remove reserved0 put -> host_fixed_interest_rate_bps: u16,
+
+
+change reserved1 -> reserved_1 and from 4 to 2
+disable_usage_as_coll_outside_emode: u8,
+utilization_limit_block_borrowing_above: u8,
+borrow_limit_outside_elevation_group: u64,
+borrow_limit_against_this_collateral_in_elevation_group: [u64; 32],
+"""
+
+
 class ReserveConfigJSON(typing.TypedDict):
     status: int
     asset_tier: int
-    reserved0: list[int]
+    host_fixed_interest_rate_bps: int
     multiplier_side_boost: list[int]
     multiplier_tag_boost: list[int]
     protocol_take_rate_pct: int
@@ -35,7 +49,11 @@ class ReserveConfigJSON(typing.TypedDict):
     deposit_withdrawal_cap: withdrawal_caps.WithdrawalCapsJSON
     debt_withdrawal_cap: withdrawal_caps.WithdrawalCapsJSON
     elevation_groups: list[int]
-    reserved1: list[int]
+    reserved_1: list[int]
+    disable_usage_as_coll_outside_emode: int
+    utilization_limit_block_borrowing_above: int
+    borrow_limit_outside_elevation_group: int
+    borrow_limit_against_this_collateral_in_elevation_group: list[int]
 
 
 @dataclass
@@ -43,7 +61,7 @@ class ReserveConfig:
     layout: typing.ClassVar = borsh.CStruct(
         "status" / borsh.U8,
         "asset_tier" / borsh.U8,
-        "reserved0" / borsh.U8[2],
+        "host_fixed_interest_rate_bps" / borsh.U16,
         "multiplier_side_boost" / borsh.U8[2],
         "multiplier_tag_boost" / borsh.U8[8],
         "protocol_take_rate_pct" / borsh.U8,
@@ -64,11 +82,15 @@ class ReserveConfig:
         "deposit_withdrawal_cap" / withdrawal_caps.WithdrawalCaps.layout,
         "debt_withdrawal_cap" / withdrawal_caps.WithdrawalCaps.layout,
         "elevation_groups" / borsh.U8[20],
-        "reserved1" / borsh.U8[4],
+        "disable_usage_as_coll_outside_emode" / borsh.U8,
+        "utilization_limit_block_borrowing_above" / borsh.U8,
+        "reserved_1" / borsh.U8[2],
+        "borrow_limit_outside_elevation_group" / borsh.U64,
+        "borrow_limit_against_this_collateral_in_elevation_group" / borsh.U64[32],
     )
     status: int
     asset_tier: int
-    reserved0: list[int]
+    host_fixed_interest_rate_bps: int
     multiplier_side_boost: list[int]
     multiplier_tag_boost: list[int]
     protocol_take_rate_pct: int
@@ -89,14 +111,18 @@ class ReserveConfig:
     deposit_withdrawal_cap: withdrawal_caps.WithdrawalCaps
     debt_withdrawal_cap: withdrawal_caps.WithdrawalCaps
     elevation_groups: list[int]
-    reserved1: list[int]
+    disable_usage_as_coll_outside_emode: int
+    utilization_limit_block_borrowing_above: int
+    reserved_1: list[int]
+    borrow_limit_outside_elevation_group: int
+    borrow_limit_against_this_collateral_in_elevation_group: list[int]
 
     @classmethod
     def from_decoded(cls, obj: Container) -> "ReserveConfig":
         return cls(
             status=obj.status,
             asset_tier=obj.asset_tier,
-            reserved0=obj.reserved0,
+            host_fixed_interest_rate_bps=obj.host_fixed_interest_rate_bps,
             multiplier_side_boost=obj.multiplier_side_boost,
             multiplier_tag_boost=obj.multiplier_tag_boost,
             protocol_take_rate_pct=obj.protocol_take_rate_pct,
@@ -123,14 +149,18 @@ class ReserveConfig:
                 obj.debt_withdrawal_cap
             ),
             elevation_groups=obj.elevation_groups,
-            reserved1=obj.reserved1,
+            reserved_1=obj.reserved_1,
+            disable_usage_as_coll_outside_emode=obj.disable_usage_as_coll_outside_emode,
+            utilization_limit_block_borrowing_above=obj.utilization_limit_block_borrowing_above,
+            borrow_limit_outside_elevation_group=obj.borrow_limit_outside_elevation_group,
+            borrow_limit_against_this_collateral_in_elevation_group=obj.borrow_limit_against_this_collateral_in_elevation_group,
         )
 
     def to_encodable(self) -> dict[str, typing.Any]:
         return {
             "status": self.status,
             "asset_tier": self.asset_tier,
-            "reserved0": self.reserved0,
+            "host_fixed_interest_rate_bps": self.host_fixed_interest_rate_bps,
             "multiplier_side_boost": self.multiplier_side_boost,
             "multiplier_tag_boost": self.multiplier_tag_boost,
             "protocol_take_rate_pct": self.protocol_take_rate_pct,
@@ -151,14 +181,18 @@ class ReserveConfig:
             "deposit_withdrawal_cap": self.deposit_withdrawal_cap.to_encodable(),
             "debt_withdrawal_cap": self.debt_withdrawal_cap.to_encodable(),
             "elevation_groups": self.elevation_groups,
-            "reserved1": self.reserved1,
+            "reserved_1": self.reserved_1,
+            "disable_usage_as_coll_outside_emode": self.disable_usage_as_coll_outside_emode,
+            "utilization_limit_block_borrowing_above": self.utilization_limit_block_borrowing_above,
+            "borrow_limit_outside_elevation_group": self.borrow_limit_outside_elevation_group,
+            "borrow_limit_against_this_collateral_in_elevation_group": self.borrow_limit_against_this_collateral_in_elevation_group,
         }
 
     def to_json(self) -> ReserveConfigJSON:
         return {
             "status": self.status,
             "asset_tier": self.asset_tier,
-            "reserved0": self.reserved0,
+            "host_fixed_interest_rate_bps": self.host_fixed_interest_rate_bps,
             "multiplier_side_boost": self.multiplier_side_boost,
             "multiplier_tag_boost": self.multiplier_tag_boost,
             "protocol_take_rate_pct": self.protocol_take_rate_pct,
@@ -179,7 +213,11 @@ class ReserveConfig:
             "deposit_withdrawal_cap": self.deposit_withdrawal_cap.to_json(),
             "debt_withdrawal_cap": self.debt_withdrawal_cap.to_json(),
             "elevation_groups": self.elevation_groups,
-            "reserved1": self.reserved1,
+            "reserved_1": self.reserved_1,
+            "disable_usage_as_coll_outside_emode": self.disable_usage_as_coll_outside_emode,
+            "utilization_limit_block_borrowing_above": self.utilization_limit_block_borrowing_above,
+            "borrow_limit_outside_elevation_group": self.borrow_limit_outside_elevation_group,
+            "borrow_limit_against_this_collateral_in_elevation_group": self.borrow_limit_against_this_collateral_in_elevation_group,
         }
 
     @classmethod
@@ -187,7 +225,7 @@ class ReserveConfig:
         return cls(
             status=obj["status"],
             asset_tier=obj["asset_tier"],
-            reserved0=obj["reserved0"],
+            host_fixed_interest_rate_bps=obj["host_fixed_interest_rate_bps"],
             multiplier_side_boost=obj["multiplier_side_boost"],
             multiplier_tag_boost=obj["multiplier_tag_boost"],
             protocol_take_rate_pct=obj["protocol_take_rate_pct"],
@@ -218,5 +256,17 @@ class ReserveConfig:
                 obj["debt_withdrawal_cap"]
             ),
             elevation_groups=obj["elevation_groups"],
-            reserved1=obj["reserved1"],
+            reserved_1=obj["reserved_1"],
+            disable_usage_as_coll_outside_emode=obj[
+                "disable_usage_as_coll_outside_emode"
+            ],
+            utilization_limit_block_borrowing_above=obj[
+                "utilization_limit_block_borrowing_above"
+            ],
+            borrow_limit_outside_elevation_group=obj[
+                "borrow_limit_outside_elevation_group"
+            ],
+            borrow_limit_against_this_collateral_in_elevation_group=obj[
+                "borrow_limit_against_this_collateral_in_elevation_group"
+            ],
         )

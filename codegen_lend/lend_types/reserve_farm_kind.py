@@ -4,6 +4,8 @@ from dataclasses import dataclass
 from anchorpy.borsh_extension import EnumForCodegen
 import borsh_construct as borsh
 
+# Release 1.6.2: no change
+
 
 class CollateralJSON(typing.TypedDict):
     kind: typing.Literal["Collateral"]

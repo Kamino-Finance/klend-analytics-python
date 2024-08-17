@@ -8,8 +8,8 @@ from anchorpy.coder.accounts import ACCOUNT_DISCRIMINATOR_SIZE
 from anchorpy.error import AccountInvalidDiscriminator
 from anchorpy.utils.rpc import get_multiple_accounts
 from anchorpy.borsh_extension import BorshPubkey
-from codegen_lend.program_id import PROGRAM_ID
-import codegen_lend.lend_types as types
+from ..program_id import PROGRAM_ID
+from .. import types
 
 
 class LendingMarketJSON(typing.TypedDict):
@@ -20,11 +20,12 @@ class LendingMarketJSON(typing.TypedDict):
     quote_currency: list[int]
     referral_fee_bps: int
     emergency_mode: int
-    reserved: list[int]
+    autodeleverage_enabled: int
+    borrow_disabled: int
     price_refresh_trigger_to_max_age_pct: int
     liquidation_max_debt_close_factor_pct: int
     insolvency_risk_unhealthy_ltv_pct: int
-    min_full_liquidation_amount_threshold: int
+    min_full_liquidation_value_threshold: int
     max_liquidatable_debt_market_value_at_once: int
     global_unhealthy_borrow_value: int
     global_allowed_borrow_value: int
@@ -32,6 +33,8 @@ class LendingMarketJSON(typing.TypedDict):
     multiplier_points_tag_boost: list[int]
     elevation_groups: list[types.elevation_group.ElevationGroupJSON]
     elevation_group_padding: list[int]
+    min_net_value_in_obligation_sf: int
+    min_value_skip_liquidation_ltv_bf_checks: int
     padding1: list[int]
 
 
@@ -46,11 +49,12 @@ class LendingMarket:
         "quote_currency" / borsh.U8[32],
         "referral_fee_bps" / borsh.U16,
         "emergency_mode" / borsh.U8,
-        "reserved" / borsh.U8[2],
+        "autodeleverage_enabled" / borsh.U8,
+        "borrow_disabled" / borsh.U8,
         "price_refresh_trigger_to_max_age_pct" / borsh.U8,
         "liquidation_max_debt_close_factor_pct" / borsh.U8,
         "insolvency_risk_unhealthy_ltv_pct" / borsh.U8,
-        "min_full_liquidation_amount_threshold" / borsh.U64,
+        "min_full_liquidation_value_threshold" / borsh.U64,
         "max_liquidatable_debt_market_value_at_once" / borsh.U64,
         "global_unhealthy_borrow_value" / borsh.U64,
         "global_allowed_borrow_value" / borsh.U64,
@@ -58,7 +62,9 @@ class LendingMarket:
         "multiplier_points_tag_boost" / borsh.U8[8],
         "elevation_groups" / types.elevation_group.ElevationGroup.layout[32],
         "elevation_group_padding" / borsh.U64[90],
-        "padding1" / borsh.U64[180],
+        "min_net_value_in_obligation_sf" / borsh.U128,
+        "min_value_skip_liquidation_ltv_bf_checks" / borsh.U64,
+        "padding1" / borsh.U64[177],
     )
     version: int
     bump_seed: int
@@ -67,11 +73,12 @@ class LendingMarket:
     quote_currency: list[int]
     referral_fee_bps: int
     emergency_mode: int
-    reserved: list[int]
+    autodeleverage_enabled: int
+    borrow_disabled: int
     price_refresh_trigger_to_max_age_pct: int
     liquidation_max_debt_close_factor_pct: int
     insolvency_risk_unhealthy_ltv_pct: int
-    min_full_liquidation_amount_threshold: int
+    min_full_liquidation_value_threshold: int
     max_liquidatable_debt_market_value_at_once: int
     global_unhealthy_borrow_value: int
     global_allowed_borrow_value: int
@@ -79,6 +86,8 @@ class LendingMarket:
     multiplier_points_tag_boost: list[int]
     elevation_groups: list[types.elevation_group.ElevationGroup]
     elevation_group_padding: list[int]
+    min_net_value_in_obligation_sf: int
+    min_value_skip_liquidation_ltv_bf_checks: int
     padding1: list[int]
 
     @classmethod
@@ -132,11 +141,12 @@ class LendingMarket:
             quote_currency=dec.quote_currency,
             referral_fee_bps=dec.referral_fee_bps,
             emergency_mode=dec.emergency_mode,
-            reserved=dec.reserved,
+            autodeleverage_enabled=dec.autodeleverage_enabled,
+            borrow_disabled=dec.borrow_disabled,
             price_refresh_trigger_to_max_age_pct=dec.price_refresh_trigger_to_max_age_pct,
             liquidation_max_debt_close_factor_pct=dec.liquidation_max_debt_close_factor_pct,
             insolvency_risk_unhealthy_ltv_pct=dec.insolvency_risk_unhealthy_ltv_pct,
-            min_full_liquidation_amount_threshold=dec.min_full_liquidation_amount_threshold,
+            min_full_liquidation_value_threshold=dec.min_full_liquidation_value_threshold,
             max_liquidatable_debt_market_value_at_once=dec.max_liquidatable_debt_market_value_at_once,
             global_unhealthy_borrow_value=dec.global_unhealthy_borrow_value,
             global_allowed_borrow_value=dec.global_allowed_borrow_value,
@@ -151,6 +161,8 @@ class LendingMarket:
                 )
             ),
             elevation_group_padding=dec.elevation_group_padding,
+            min_net_value_in_obligation_sf=dec.min_net_value_in_obligation_sf,
+            min_value_skip_liquidation_ltv_bf_checks=dec.min_value_skip_liquidation_ltv_bf_checks,
             padding1=dec.padding1,
         )
 
@@ -163,11 +175,12 @@ class LendingMarket:
             "quote_currency": self.quote_currency,
             "referral_fee_bps": self.referral_fee_bps,
             "emergency_mode": self.emergency_mode,
-            "reserved": self.reserved,
+            "autodeleverage_enabled": self.autodeleverage_enabled,
+            "borrow_disabled": self.borrow_disabled,
             "price_refresh_trigger_to_max_age_pct": self.price_refresh_trigger_to_max_age_pct,
             "liquidation_max_debt_close_factor_pct": self.liquidation_max_debt_close_factor_pct,
             "insolvency_risk_unhealthy_ltv_pct": self.insolvency_risk_unhealthy_ltv_pct,
-            "min_full_liquidation_amount_threshold": self.min_full_liquidation_amount_threshold,
+            "min_full_liquidation_value_threshold": self.min_full_liquidation_value_threshold,
             "max_liquidatable_debt_market_value_at_once": self.max_liquidatable_debt_market_value_at_once,
             "global_unhealthy_borrow_value": self.global_unhealthy_borrow_value,
             "global_allowed_borrow_value": self.global_allowed_borrow_value,
@@ -177,6 +190,8 @@ class LendingMarket:
                 map(lambda item: item.to_json(), self.elevation_groups)
             ),
             "elevation_group_padding": self.elevation_group_padding,
+            "min_net_value_in_obligation_sf": self.min_net_value_in_obligation_sf,
+            "min_value_skip_liquidation_ltv_bf_checks": self.min_value_skip_liquidation_ltv_bf_checks,
             "padding1": self.padding1,
         }
 
@@ -192,7 +207,8 @@ class LendingMarket:
             quote_currency=obj["quote_currency"],
             referral_fee_bps=obj["referral_fee_bps"],
             emergency_mode=obj["emergency_mode"],
-            reserved=obj["reserved"],
+            autodeleverage_enabled=obj["autodeleverage_enabled"],
+            borrow_disabled=obj["borrow_disabled"],
             price_refresh_trigger_to_max_age_pct=obj[
                 "price_refresh_trigger_to_max_age_pct"
             ],
@@ -200,8 +216,8 @@ class LendingMarket:
                 "liquidation_max_debt_close_factor_pct"
             ],
             insolvency_risk_unhealthy_ltv_pct=obj["insolvency_risk_unhealthy_ltv_pct"],
-            min_full_liquidation_amount_threshold=obj[
-                "min_full_liquidation_amount_threshold"
+            min_full_liquidation_value_threshold=obj[
+                "min_full_liquidation_value_threshold"
             ],
             max_liquidatable_debt_market_value_at_once=obj[
                 "max_liquidatable_debt_market_value_at_once"
@@ -217,5 +233,9 @@ class LendingMarket:
                 )
             ),
             elevation_group_padding=obj["elevation_group_padding"],
+            min_net_value_in_obligation_sf=obj["min_net_value_in_obligation_sf"],
+            min_value_skip_liquidation_ltv_bf_checks=obj[
+                "min_value_skip_liquidation_ltv_bf_checks"
+            ],
             padding1=obj["padding1"],
         )

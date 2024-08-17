@@ -8,18 +8,22 @@ from anchorpy.coder.accounts import ACCOUNT_DISCRIMINATOR_SIZE
 from anchorpy.error import AccountInvalidDiscriminator
 from anchorpy.utils.rpc import get_multiple_accounts
 from anchorpy.borsh_extension import BorshPubkey
-from codegen_lend.program_id import PROGRAM_ID
+from ..program_id import PROGRAM_ID
 
 
 class ReferrerStateJSON(typing.TypedDict):
     short_url: str
+    owner: str
 
 
 @dataclass
 class ReferrerState:
     discriminator: typing.ClassVar = b"\xc2Q\xd9g\x0c\x13\x0cB"
-    layout: typing.ClassVar = borsh.CStruct("short_url" / BorshPubkey)
+    layout: typing.ClassVar = borsh.CStruct(
+        "short_url" / BorshPubkey, "owner" / BorshPubkey
+    )
     short_url: Pubkey
+    owner: Pubkey
 
     @classmethod
     async def fetch(
@@ -66,15 +70,18 @@ class ReferrerState:
         dec = ReferrerState.layout.parse(data[ACCOUNT_DISCRIMINATOR_SIZE:])
         return cls(
             short_url=dec.short_url,
+            owner=dec.owner,
         )
 
     def to_json(self) -> ReferrerStateJSON:
         return {
             "short_url": str(self.short_url),
+            "owner": str(self.owner),
         }
 
     @classmethod
     def from_json(cls, obj: ReferrerStateJSON) -> "ReferrerState":
         return cls(
             short_url=Pubkey.from_string(obj["short_url"]),
+            owner=Pubkey.from_string(obj["owner"]),
         )

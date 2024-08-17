@@ -3,9 +3,8 @@ import typing
 from solders.pubkey import Pubkey
 from solders.system_program import ID as SYS_PROGRAM_ID
 from solders.sysvar import RENT
-from spl.token.constants import TOKEN_PROGRAM_ID
 from solders.instruction import Instruction, AccountMeta
-from codegen_lend.program_id import PROGRAM_ID
+from ..program_id import PROGRAM_ID
 
 
 class InitReserveAccounts(typing.TypedDict):
@@ -18,6 +17,8 @@ class InitReserveAccounts(typing.TypedDict):
     fee_receiver: Pubkey
     reserve_collateral_mint: Pubkey
     reserve_collateral_supply: Pubkey
+    liquidity_token_program: Pubkey
+    collateral_token_program: Pubkey
 
 
 def init_reserve(
@@ -60,7 +61,16 @@ def init_reserve(
             is_writable=True,
         ),
         AccountMeta(pubkey=RENT, is_signer=False, is_writable=False),
-        AccountMeta(pubkey=TOKEN_PROGRAM_ID, is_signer=False, is_writable=False),
+        AccountMeta(
+            pubkey=accounts["liquidity_token_program"],
+            is_signer=False,
+            is_writable=False,
+        ),
+        AccountMeta(
+            pubkey=accounts["collateral_token_program"],
+            is_signer=False,
+            is_writable=False,
+        ),
         AccountMeta(pubkey=SYS_PROGRAM_ID, is_signer=False, is_writable=False),
     ]
     if remaining_accounts is not None:

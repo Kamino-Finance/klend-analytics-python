@@ -3,11 +3,12 @@ import typing
 from solders.pubkey import Pubkey
 from spl.token.constants import TOKEN_PROGRAM_ID
 from solders.instruction import Instruction, AccountMeta
-from codegen_lend.program_id import PROGRAM_ID
+from ..program_id import PROGRAM_ID
 
 
 class RedeemFeesAccounts(typing.TypedDict):
     reserve: Pubkey
+    reserve_liquidity_mint: Pubkey
     reserve_liquidity_fee_receiver: Pubkey
     reserve_supply_liquidity: Pubkey
     lending_market: Pubkey
@@ -21,6 +22,9 @@ def redeem_fees(
 ) -> Instruction:
     keys: list[AccountMeta] = [
         AccountMeta(pubkey=accounts["reserve"], is_signer=False, is_writable=True),
+        AccountMeta(
+            pubkey=accounts["reserve_liquidity_mint"], is_signer=False, is_writable=True
+        ),
         AccountMeta(
             pubkey=accounts["reserve_liquidity_fee_receiver"],
             is_signer=False,

@@ -6,7 +6,7 @@ from solders.sysvar import RENT
 from solders.instruction import Instruction, AccountMeta
 from anchorpy.borsh_extension import BorshPubkey
 import borsh_construct as borsh
-from codegen_lend.program_id import PROGRAM_ID
+from ..program_id import PROGRAM_ID
 
 
 class InitReferrerTokenStateArgs(typing.TypedDict):

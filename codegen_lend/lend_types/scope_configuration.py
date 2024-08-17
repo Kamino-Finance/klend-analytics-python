@@ -7,6 +7,9 @@ from anchorpy.borsh_extension import BorshPubkey
 import borsh_construct as borsh
 
 
+# Release 1.6.2: No change
+
+
 class ScopeConfigurationJSON(typing.TypedDict):
     price_feed: str
     price_chain: list[int]

@@ -4,6 +4,12 @@ from dataclasses import dataclass
 from anchorpy.borsh_extension import EnumForCodegen
 import borsh_construct as borsh
 
+# Adapting for release 1.6.2
+
+# added UpdateFarmCollateral, UpdateFarmDebt, UpdateDisableUsageAsCollateralOutsideEmode, UpdateBlockBorrowingAboveUtilization, UpdateBlockPriceUsage, UpdateBorrowLimitOutsideElevationGroup, UpdateBorrowLimitsInElevationGroupAgainstThisReserve, UpdateHostFixedInterestRateBps
+
+# Fixing and adding values
+
 
 class UpdateLoanToValuePctJSON(typing.TypedDict):
     kind: typing.Literal["UpdateLoanToValuePct"]
@@ -161,9 +167,41 @@ class UpdateReserveStatusJSON(typing.TypedDict):
     kind: typing.Literal["UpdateReserveStatus"]
 
 
+class UpdateFarmCollateralJSON(typing.TypedDict):
+    kind: typing.Literal["UpdateFarmCollateral"]
+
+
+class UpdateFarmDebtJSON(typing.TypedDict):
+    kind: typing.Literal["UpdateFarmDebt"]
+
+
+class UpdateDisableUsageAsCollateralOutsideEmodeJSON(typing.TypedDict):
+    kind: typing.Literal["UpdateDisableUsageAsCollateralOutsideEmode"]
+
+
+class UpdateBlockBorrowingAboveUtilizationJSON(typing.TypedDict):
+    kind: typing.Literal["UpdateBlockBorrowingAboveUtilization"]
+
+
+class UpdateBlockPriceUsageJSON(typing.TypedDict):
+    kind: typing.Literal["UpdateBlockPriceUsage"]
+
+
+class UpdateBorrowLimitOutsideElevationGroupJSON(typing.TypedDict):
+    kind: typing.Literal["UpdateBorrowLimitOutsideElevationGroup"]
+
+
+class UpdateBorrowLimitsInElevationGroupAgainstThisReserveJSON(typing.TypedDict):
+    kind: typing.Literal["UpdateBorrowLimitsInElevationGroupAgainstThisReserve"]
+
+
+class UpdateHostFixedInterestRateBpsJSON(typing.TypedDict):
+    kind: typing.Literal["UpdateHostFixedInterestRateBps"]
+
+
 @dataclass
 class UpdateLoanToValuePct:
-    discriminator: typing.ClassVar = 0
+    discriminator: typing.ClassVar = 1
     kind: typing.ClassVar = "UpdateLoanToValuePct"
 
     @classmethod
@@ -181,7 +219,7 @@ class UpdateLoanToValuePct:
 
 @dataclass
 class UpdateMaxLiquidationBonusBps:
-    discriminator: typing.ClassVar = 1
+    discriminator: typing.ClassVar = 2
     kind: typing.ClassVar = "UpdateMaxLiquidationBonusBps"
 
     @classmethod
@@ -199,7 +237,7 @@ class UpdateMaxLiquidationBonusBps:
 
 @dataclass
 class UpdateLiquidationThresholdPct:
-    discriminator: typing.ClassVar = 2
+    discriminator: typing.ClassVar = 3
     kind: typing.ClassVar = "UpdateLiquidationThresholdPct"
 
     @classmethod
@@ -217,7 +255,7 @@ class UpdateLiquidationThresholdPct:
 
 @dataclass
 class UpdateProtocolLiquidationFee:
-    discriminator: typing.ClassVar = 3
+    discriminator: typing.ClassVar = 4
     kind: typing.ClassVar = "UpdateProtocolLiquidationFee"
 
     @classmethod
@@ -235,7 +273,7 @@ class UpdateProtocolLiquidationFee:
 
 @dataclass
 class UpdateProtocolTakeRate:
-    discriminator: typing.ClassVar = 4
+    discriminator: typing.ClassVar = 5
     kind: typing.ClassVar = "UpdateProtocolTakeRate"
 
     @classmethod
@@ -253,7 +291,7 @@ class UpdateProtocolTakeRate:
 
 @dataclass
 class UpdateFeesBorrowFee:
-    discriminator: typing.ClassVar = 5
+    discriminator: typing.ClassVar = 6
     kind: typing.ClassVar = "UpdateFeesBorrowFee"
 
     @classmethod
@@ -271,7 +309,7 @@ class UpdateFeesBorrowFee:
 
 @dataclass
 class UpdateFeesFlashLoanFee:
-    discriminator: typing.ClassVar = 6
+    discriminator: typing.ClassVar = 7
     kind: typing.ClassVar = "UpdateFeesFlashLoanFee"
 
     @classmethod
@@ -289,7 +327,7 @@ class UpdateFeesFlashLoanFee:
 
 @dataclass
 class UpdateFeesReferralFeeBps:
-    discriminator: typing.ClassVar = 7
+    discriminator: typing.ClassVar = 8
     kind: typing.ClassVar = "UpdateFeesReferralFeeBps"
 
     @classmethod
@@ -307,7 +345,7 @@ class UpdateFeesReferralFeeBps:
 
 @dataclass
 class UpdateDepositLimit:
-    discriminator: typing.ClassVar = 8
+    discriminator: typing.ClassVar = 9
     kind: typing.ClassVar = "UpdateDepositLimit"
 
     @classmethod
@@ -325,7 +363,7 @@ class UpdateDepositLimit:
 
 @dataclass
 class UpdateBorrowLimit:
-    discriminator: typing.ClassVar = 9
+    discriminator: typing.ClassVar = 10
     kind: typing.ClassVar = "UpdateBorrowLimit"
 
     @classmethod
@@ -343,7 +381,7 @@ class UpdateBorrowLimit:
 
 @dataclass
 class UpdateTokenInfoLowerHeuristic:
-    discriminator: typing.ClassVar = 10
+    discriminator: typing.ClassVar = 11
     kind: typing.ClassVar = "UpdateTokenInfoLowerHeuristic"
 
     @classmethod
@@ -361,7 +399,7 @@ class UpdateTokenInfoLowerHeuristic:
 
 @dataclass
 class UpdateTokenInfoUpperHeuristic:
-    discriminator: typing.ClassVar = 11
+    discriminator: typing.ClassVar = 12
     kind: typing.ClassVar = "UpdateTokenInfoUpperHeuristic"
 
     @classmethod
@@ -379,7 +417,7 @@ class UpdateTokenInfoUpperHeuristic:
 
 @dataclass
 class UpdateTokenInfoExpHeuristic:
-    discriminator: typing.ClassVar = 12
+    discriminator: typing.ClassVar = 13
     kind: typing.ClassVar = "UpdateTokenInfoExpHeuristic"
 
     @classmethod
@@ -397,7 +435,7 @@ class UpdateTokenInfoExpHeuristic:
 
 @dataclass
 class UpdateTokenInfoTwapDivergence:
-    discriminator: typing.ClassVar = 13
+    discriminator: typing.ClassVar = 14
     kind: typing.ClassVar = "UpdateTokenInfoTwapDivergence"
 
     @classmethod
@@ -415,7 +453,7 @@ class UpdateTokenInfoTwapDivergence:
 
 @dataclass
 class UpdateTokenInfoScopeTwap:
-    discriminator: typing.ClassVar = 14
+    discriminator: typing.ClassVar = 15
     kind: typing.ClassVar = "UpdateTokenInfoScopeTwap"
 
     @classmethod
@@ -433,7 +471,7 @@ class UpdateTokenInfoScopeTwap:
 
 @dataclass
 class UpdateTokenInfoScopeChain:
-    discriminator: typing.ClassVar = 15
+    discriminator: typing.ClassVar = 16
     kind: typing.ClassVar = "UpdateTokenInfoScopeChain"
 
     @classmethod
@@ -451,7 +489,7 @@ class UpdateTokenInfoScopeChain:
 
 @dataclass
 class UpdateTokenInfoName:
-    discriminator: typing.ClassVar = 16
+    discriminator: typing.ClassVar = 17
     kind: typing.ClassVar = "UpdateTokenInfoName"
 
     @classmethod
@@ -469,7 +507,7 @@ class UpdateTokenInfoName:
 
 @dataclass
 class UpdateTokenInfoPriceMaxAge:
-    discriminator: typing.ClassVar = 17
+    discriminator: typing.ClassVar = 18
     kind: typing.ClassVar = "UpdateTokenInfoPriceMaxAge"
 
     @classmethod
@@ -487,7 +525,7 @@ class UpdateTokenInfoPriceMaxAge:
 
 @dataclass
 class UpdateTokenInfoTwapMaxAge:
-    discriminator: typing.ClassVar = 18
+    discriminator: typing.ClassVar = 19
     kind: typing.ClassVar = "UpdateTokenInfoTwapMaxAge"
 
     @classmethod
@@ -505,7 +543,7 @@ class UpdateTokenInfoTwapMaxAge:
 
 @dataclass
 class UpdateScopePriceFeed:
-    discriminator: typing.ClassVar = 19
+    discriminator: typing.ClassVar = 20
     kind: typing.ClassVar = "UpdateScopePriceFeed"
 
     @classmethod
@@ -523,7 +561,7 @@ class UpdateScopePriceFeed:
 
 @dataclass
 class UpdatePythPrice:
-    discriminator: typing.ClassVar = 20
+    discriminator: typing.ClassVar = 21
     kind: typing.ClassVar = "UpdatePythPrice"
 
     @classmethod
@@ -541,7 +579,7 @@ class UpdatePythPrice:
 
 @dataclass
 class UpdateSwitchboardFeed:
-    discriminator: typing.ClassVar = 21
+    discriminator: typing.ClassVar = 22
     kind: typing.ClassVar = "UpdateSwitchboardFeed"
 
     @classmethod
@@ -559,7 +597,7 @@ class UpdateSwitchboardFeed:
 
 @dataclass
 class UpdateSwitchboardTwapFeed:
-    discriminator: typing.ClassVar = 22
+    discriminator: typing.ClassVar = 23
     kind: typing.ClassVar = "UpdateSwitchboardTwapFeed"
 
     @classmethod
@@ -577,7 +615,7 @@ class UpdateSwitchboardTwapFeed:
 
 @dataclass
 class UpdateBorrowRateCurve:
-    discriminator: typing.ClassVar = 23
+    discriminator: typing.ClassVar = 24
     kind: typing.ClassVar = "UpdateBorrowRateCurve"
 
     @classmethod
@@ -595,7 +633,7 @@ class UpdateBorrowRateCurve:
 
 @dataclass
 class UpdateEntireReserveConfig:
-    discriminator: typing.ClassVar = 24
+    discriminator: typing.ClassVar = 25
     kind: typing.ClassVar = "UpdateEntireReserveConfig"
 
     @classmethod
@@ -613,7 +651,7 @@ class UpdateEntireReserveConfig:
 
 @dataclass
 class UpdateDebtWithdrawalCap:
-    discriminator: typing.ClassVar = 25
+    discriminator: typing.ClassVar = 26
     kind: typing.ClassVar = "UpdateDebtWithdrawalCap"
 
     @classmethod
@@ -631,7 +669,7 @@ class UpdateDebtWithdrawalCap:
 
 @dataclass
 class UpdateDepositWithdrawalCap:
-    discriminator: typing.ClassVar = 26
+    discriminator: typing.ClassVar = 27
     kind: typing.ClassVar = "UpdateDepositWithdrawalCap"
 
     @classmethod
@@ -649,7 +687,7 @@ class UpdateDepositWithdrawalCap:
 
 @dataclass
 class UpdateDebtWithdrawalCapCurrentTotal:
-    discriminator: typing.ClassVar = 27
+    discriminator: typing.ClassVar = 28
     kind: typing.ClassVar = "UpdateDebtWithdrawalCapCurrentTotal"
 
     @classmethod
@@ -667,7 +705,7 @@ class UpdateDebtWithdrawalCapCurrentTotal:
 
 @dataclass
 class UpdateDepositWithdrawalCapCurrentTotal:
-    discriminator: typing.ClassVar = 28
+    discriminator: typing.ClassVar = 29
     kind: typing.ClassVar = "UpdateDepositWithdrawalCapCurrentTotal"
 
     @classmethod
@@ -685,7 +723,7 @@ class UpdateDepositWithdrawalCapCurrentTotal:
 
 @dataclass
 class UpdateBadDebtLiquidationBonusBps:
-    discriminator: typing.ClassVar = 29
+    discriminator: typing.ClassVar = 30
     kind: typing.ClassVar = "UpdateBadDebtLiquidationBonusBps"
 
     @classmethod
@@ -703,7 +741,7 @@ class UpdateBadDebtLiquidationBonusBps:
 
 @dataclass
 class UpdateMinLiquidationBonusBps:
-    discriminator: typing.ClassVar = 30
+    discriminator: typing.ClassVar = 31
     kind: typing.ClassVar = "UpdateMinLiquidationBonusBps"
 
     @classmethod
@@ -721,7 +759,7 @@ class UpdateMinLiquidationBonusBps:
 
 @dataclass
 class DeleveragingMarginCallPeriod:
-    discriminator: typing.ClassVar = 31
+    discriminator: typing.ClassVar = 32
     kind: typing.ClassVar = "DeleveragingMarginCallPeriod"
 
     @classmethod
@@ -739,7 +777,7 @@ class DeleveragingMarginCallPeriod:
 
 @dataclass
 class UpdateBorrowFactor:
-    discriminator: typing.ClassVar = 32
+    discriminator: typing.ClassVar = 33
     kind: typing.ClassVar = "UpdateBorrowFactor"
 
     @classmethod
@@ -757,7 +795,7 @@ class UpdateBorrowFactor:
 
 @dataclass
 class UpdateAssetTier:
-    discriminator: typing.ClassVar = 33
+    discriminator: typing.ClassVar = 34
     kind: typing.ClassVar = "UpdateAssetTier"
 
     @classmethod
@@ -775,7 +813,7 @@ class UpdateAssetTier:
 
 @dataclass
 class UpdateElevationGroup:
-    discriminator: typing.ClassVar = 34
+    discriminator: typing.ClassVar = 35
     kind: typing.ClassVar = "UpdateElevationGroup"
 
     @classmethod
@@ -793,7 +831,7 @@ class UpdateElevationGroup:
 
 @dataclass
 class DeleveragingThresholdSlotsPerBps:
-    discriminator: typing.ClassVar = 35
+    discriminator: typing.ClassVar = 36
     kind: typing.ClassVar = "DeleveragingThresholdSlotsPerBps"
 
     @classmethod
@@ -811,7 +849,7 @@ class DeleveragingThresholdSlotsPerBps:
 
 @dataclass
 class UpdateMultiplierSideBoost:
-    discriminator: typing.ClassVar = 36
+    discriminator: typing.ClassVar = 37
     kind: typing.ClassVar = "UpdateMultiplierSideBoost"
 
     @classmethod
@@ -829,7 +867,7 @@ class UpdateMultiplierSideBoost:
 
 @dataclass
 class UpdateMultiplierTagBoost:
-    discriminator: typing.ClassVar = 37
+    discriminator: typing.ClassVar = 38
     kind: typing.ClassVar = "UpdateMultiplierTagBoost"
 
     @classmethod
@@ -847,7 +885,7 @@ class UpdateMultiplierTagBoost:
 
 @dataclass
 class UpdateReserveStatus:
-    discriminator: typing.ClassVar = 38
+    discriminator: typing.ClassVar = 39
     kind: typing.ClassVar = "UpdateReserveStatus"
 
     @classmethod
@@ -860,6 +898,150 @@ class UpdateReserveStatus:
     def to_encodable(cls) -> dict:
         return {
             "UpdateReserveStatus": {},
+        }
+
+
+@dataclass
+class UpdateFarmCollateral:
+    discriminator: typing.ClassVar = 40
+    kind: typing.ClassVar = "UpdateFarmCollateral"
+
+    @classmethod
+    def to_json(cls) -> UpdateFarmCollateralJSON:
+        return UpdateFarmCollateralJSON(
+            kind="UpdateFarmCollateral",
+        )
+
+    @classmethod
+    def to_encodable(cls) -> dict:
+        return {
+            "UpdateFarmCollateral": {},
+        }
+
+
+@dataclass
+class UpdateFarmDebt:
+    discriminator: typing.ClassVar = 41
+    kind: typing.ClassVar = "UpdateFarmDebt"
+
+    @classmethod
+    def to_json(cls) -> UpdateFarmDebtJSON:
+        return UpdateFarmDebtJSON(
+            kind="UpdateFarmDebt",
+        )
+
+    @classmethod
+    def to_encodable(cls) -> dict:
+        return {
+            "UpdateFarmDebt": {},
+        }
+
+
+@dataclass
+class UpdateDisableUsageAsCollateralOutsideEmode:
+    discriminator: typing.ClassVar = 42
+    kind: typing.ClassVar = "UpdateDisableUsageAsCollateralOutsideEmode"
+
+    @classmethod
+    def to_json(cls) -> UpdateDisableUsageAsCollateralOutsideEmodeJSON:
+        return UpdateDisableUsageAsCollateralOutsideEmodeJSON(
+            kind="UpdateFarmDebt",
+        )
+
+    @classmethod
+    def to_encodable(cls) -> dict:
+        return {
+            "UpdateDisableUsageAsCollateralOutsideEmode": {},
+        }
+
+
+@dataclass
+class UpdateBlockBorrowingAboveUtilization:
+    discriminator: typing.ClassVar = 43
+    kind: typing.ClassVar = "UpdateBlockBorrowingAboveUtilization"
+
+    @classmethod
+    def to_json(cls) -> UpdateBlockBorrowingAboveUtilizationJSON:
+        return UpdateBlockBorrowingAboveUtilizationJSON(
+            kind="UpdateBlockBorrowingAboveUtilization",
+        )
+
+    @classmethod
+    def to_encodable(cls) -> dict:
+        return {
+            "UpdateBlockBorrowingAboveUtilization": {},
+        }
+
+
+@dataclass
+class UpdateBlockPriceUsage:
+    discriminator: typing.ClassVar = 44
+    kind: typing.ClassVar = "UpdateBlockPriceUsage"
+
+    @classmethod
+    def to_json(cls) -> UpdateBlockPriceUsageJSON:
+        return UpdateBlockPriceUsageJSON(
+            kind="UpdateBlockPriceUsage",
+        )
+
+    @classmethod
+    def to_encodable(cls) -> dict:
+        return {
+            "UpdateBlockPriceUsage": {},
+        }
+
+
+@dataclass
+class UpdateBorrowLimitOutsideElevationGroup:
+    discriminator: typing.ClassVar = 45
+    kind: typing.ClassVar = "UpdateBorrowLimitOutsideElevationGroup"
+
+    @classmethod
+    def to_json(cls) -> UpdateBorrowLimitOutsideElevationGroupJSON:
+        return UpdateBorrowLimitOutsideElevationGroupJSON(
+            kind="UpdateBorrowLimitOutsideElevationGroup",
+        )
+
+    @classmethod
+    def to_encodable(cls) -> dict:
+        return {
+            "UpdateBorrowLimitOutsideElevationGroup": {},
+        }
+
+
+@dataclass
+class UpdateBorrowLimitsInElevationGroupAgainstThisReserve:
+    discriminator: typing.ClassVar = 46
+    kind: typing.ClassVar = "UpdateBorrowLimitsInElevationGroupAgainstThisReserve"
+
+    @classmethod
+    def to_json(cls) -> UpdateBorrowLimitsInElevationGroupAgainstThisReserveJSON:
+        return UpdateBorrowLimitsInElevationGroupAgainstThisReserveJSON(
+            kind="UpdateBorrowLimitsInElevationGroupAgainstThisReserve",
+        )
+
+    @classmethod
+    def to_encodable(cls) -> dict:
+        return {
+            "UpdateBorrowLimitsInElevationGroupAgainstThisReserve": {},
+        }
+
+
+@dataclass
+class UpdateHostFixedInterestRateBps:
+    discriminator: typing.ClassVar = 47
+    kind: typing.ClassVar = "UpdateHostFixedInterestRateBps"
+
+    @classmethod
+    def to_json(cls) -> UpdateHostFixedInterestRateBpsJSON:
+        return UpdateHostFixedInterestRateBpsJSON(
+            kind="UpdateHostFixedInterestRateBps",
+        )
+
+    @classmethod
+    def to_encodable(cls) -> dict:
+        return {
+            "UpdateHostFixedInterestRateBps": {},
         }
 
 
@@ -903,6 +1085,14 @@ UpdateConfigModeKind = typing.Union[
     UpdateMultiplierSideBoost,
     UpdateMultiplierTagBoost,
     UpdateReserveStatus,
+    UpdateFarmCollateral,
+    UpdateFarmDebt,
+    UpdateDisableUsageAsCollateralOutsideEmode,
+    UpdateBlockBorrowingAboveUtilization,
+    UpdateBlockPriceUsage,
+    UpdateBorrowLimitOutsideElevationGroup,
+    UpdateBorrowLimitsInElevationGroupAgainstThisReserve,
+    UpdateHostFixedInterestRateBps,
 ]
 UpdateConfigModeJSON = typing.Union[
     UpdateLoanToValuePctJSON,
@@ -944,6 +1134,14 @@ UpdateConfigModeJSON = typing.Union[
     UpdateMultiplierSideBoostJSON,
     UpdateMultiplierTagBoostJSON,
     UpdateReserveStatusJSON,
+    UpdateFarmCollateralJSON,
+    UpdateFarmDebtJSON,
+    UpdateDisableUsageAsCollateralOutsideEmodeJSON,
+    UpdateBlockBorrowingAboveUtilizationJSON,
+    UpdateBlockPriceUsageJSON,
+    UpdateBorrowLimitOutsideElevationGroupJSON,
+    UpdateBorrowLimitsInElevationGroupAgainstThisReserveJSON,
+    UpdateHostFixedInterestRateBpsJSON,
 ]
 
 
@@ -1028,6 +1226,22 @@ def from_decoded(obj: dict) -> UpdateConfigModeKind:
         return UpdateMultiplierTagBoost()
     if "UpdateReserveStatus" in obj:
         return UpdateReserveStatus()
+    if "UpdateFarmCollateral" in obj:
+        return UpdateFarmCollateral()
+    if "UpdateFarmDebt" in obj:
+        return UpdateFarmDebt()
+    if "UpdateDisableUsageAsCollateralOutsideEmode" in obj:
+        return UpdateDisableUsageAsCollateralOutsideEmode()
+    if "UpdateBlockBorrowingAboveUtilization" in obj:
+        return UpdateBlockBorrowingAboveUtilization()
+    if "UpdateBlockPriceUsage" in obj:
+        return UpdateBlockPriceUsage()
+    if "UpdateBorrowLimitOutsideElevationGroup" in obj:
+        return UpdateBorrowLimitOutsideElevationGroup()
+    if "UpdateBorrowLimitsInElevationGroupAgainstThisReserve" in obj:
+        return UpdateBorrowLimitsInElevationGroupAgainstThisReserve()
+    if "UpdateHostFixedInterestRateBps" in obj:
+        return UpdateHostFixedInterestRateBps()
     raise ValueError("Invalid enum object")
 
 
@@ -1110,8 +1324,23 @@ def from_json(obj: UpdateConfigModeJSON) -> UpdateConfigModeKind:
         return UpdateMultiplierTagBoost()
     if obj["kind"] == "UpdateReserveStatus":
         return UpdateReserveStatus()
-    kind = obj["kind"]
-    raise ValueError(f"Unrecognized enum kind: {kind}")
+    if obj["kind"] == "UpdateFarmCollateral":
+        return UpdateFarmCollateral()
+    if obj["kind"] == "UpdateFarmDebt":
+        return UpdateFarmDebt()
+    if obj["kind"] == "UpdateDisableUsageAsCollateralOutsideEmode":
+        return UpdateDisableUsageAsCollateralOutsideEmode()
+    if obj["kind"] == "UpdateBlockBorrowingAboveUtilization":
+        return UpdateBlockBorrowingAboveUtilization()
+    if obj["kind"] == "UpdateBlockPriceUsage":
+        return UpdateBlockPriceUsage()
+    if obj["kind"] == "UpdateBorrowLimitOutsideElevationGroup":
+        return UpdateBorrowLimitOutsideElevationGroup()
+    if obj["kind"] == "UpdateBorrowLimitsInElevationGroupAgainstThisReserve":
+        return UpdateBorrowLimitsInElevationGroupAgainstThisReserve()
+    if obj["kind"] == "UpdateHostFixedInterestRateBps":
+        return UpdateHostFixedInterestRateBps()
+    raise ValueError(f"Unrecognized enum kind: {obj["kind"]}")
 
 
 layout = EnumForCodegen(
@@ -1154,4 +1383,12 @@ layout = EnumForCodegen(
     "UpdateMultiplierSideBoost" / borsh.CStruct(),
     "UpdateMultiplierTagBoost" / borsh.CStruct(),
     "UpdateReserveStatus" / borsh.CStruct(),
+    "UpdateFarmCollateral" / borsh.CStruct(),
+    "UpdateFarmDebt" / borsh.CStruct(),
+    "UpdateDisableUsageAsCollateralOutsideEmode" / borsh.CStruct(),
+    "UpdateBlockBorrowingAboveUtilization" / borsh.CStruct(),
+    "UpdateBlockPriceUsage" / borsh.CStruct(),
+    "UpdateBorrowLimitOutsideElevationGroup" / borsh.CStruct(),
+    "UpdateBorrowLimitsInElevationGroupAgainstThisReserve" / borsh.CStruct(),
+    "UpdateHostFixedInterestRateBps" / borsh.CStruct(),
 )

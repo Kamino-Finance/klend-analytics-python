@@ -3,10 +3,9 @@ import typing
 from solders.pubkey import Pubkey
 from solders.system_program import ID as SYS_PROGRAM_ID
 from solders.sysvar import RENT
-from spl.token.constants import TOKEN_PROGRAM_ID
 from solders.instruction import Instruction, AccountMeta
 import borsh_construct as borsh
-from codegen_lend.program_id import PROGRAM_ID
+from ..program_id import PROGRAM_ID
 
 
 class RefreshObligationFarmsForReserveArgs(typing.TypedDict):
@@ -57,7 +56,6 @@ def refresh_obligation_farms_for_reserve(
             pubkey=accounts["farms_program"], is_signer=False, is_writable=False
         ),
         AccountMeta(pubkey=RENT, is_signer=False, is_writable=False),
-        AccountMeta(pubkey=TOKEN_PROGRAM_ID, is_signer=False, is_writable=False),
         AccountMeta(pubkey=SYS_PROGRAM_ID, is_signer=False, is_writable=False),
     ]
     if remaining_accounts is not None:

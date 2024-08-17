@@ -4,7 +4,7 @@ from solders.pubkey import Pubkey
 from spl.token.constants import TOKEN_PROGRAM_ID
 from solders.instruction import Instruction, AccountMeta
 import borsh_construct as borsh
-from codegen_lend.program_id import PROGRAM_ID
+from ..program_id import PROGRAM_ID
 
 
 class WithdrawObligationCollateralArgs(typing.TypedDict):
@@ -43,7 +43,7 @@ def withdraw_obligation_collateral(
             is_writable=False,
         ),
         AccountMeta(
-            pubkey=accounts["withdraw_reserve"], is_signer=False, is_writable=False
+            pubkey=accounts["withdraw_reserve"], is_signer=False, is_writable=True
         ),
         AccountMeta(
             pubkey=accounts["reserve_source_collateral"],

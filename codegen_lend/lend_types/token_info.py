@@ -11,6 +11,14 @@ from construct import Container
 import borsh_construct as borsh
 
 
+# Adapting for release 1.6.2
+"""
+block_price_usage: u8
+reserved: u8[7]
+padding -> padding: u64[19]
+"""
+
+
 class TokenInfoJSON(typing.TypedDict):
     name: list[int]
     heuristic: price_heuristic.PriceHeuristicJSON
@@ -20,6 +28,8 @@ class TokenInfoJSON(typing.TypedDict):
     scope_configuration: scope_configuration.ScopeConfigurationJSON
     switchboard_configuration: switchboard_configuration.SwitchboardConfigurationJSON
     pyth_configuration: pyth_configuration.PythConfigurationJSON
+    block_price_usage: int
+    reserved: list[int]
     padding: list[int]
 
 
@@ -35,7 +45,9 @@ class TokenInfo:
         "switchboard_configuration"
         / switchboard_configuration.SwitchboardConfiguration.layout,
         "pyth_configuration" / pyth_configuration.PythConfiguration.layout,
-        "padding" / borsh.U64[20],
+        "block_price_usage" / borsh.U8,
+        "reserved" / borsh.U8[7],
+        "padding" / borsh.U64[19],
     )
     name: list[int]
     heuristic: price_heuristic.PriceHeuristic
@@ -45,6 +57,8 @@ class TokenInfo:
     scope_configuration: scope_configuration.ScopeConfiguration
     switchboard_configuration: switchboard_configuration.SwitchboardConfiguration
     pyth_configuration: pyth_configuration.PythConfiguration
+    block_price_usage: int
+    reserved: list[int]
     padding: list[int]
 
     @classmethod
@@ -64,6 +78,8 @@ class TokenInfo:
             pyth_configuration=pyth_configuration.PythConfiguration.from_decoded(
                 obj.pyth_configuration
             ),
+            block_price_usage=obj.block_price_usage,
+            reserved=obj.reserved,
             padding=obj.padding,
         )
 
@@ -77,6 +93,8 @@ class TokenInfo:
             "scope_configuration": self.scope_configuration.to_encodable(),
             "switchboard_configuration": self.switchboard_configuration.to_encodable(),
             "pyth_configuration": self.pyth_configuration.to_encodable(),
+            "block_price_usage": self.block_price_usage,
+            "reserved": self.reserved,
             "padding": self.padding,
         }
 
@@ -90,6 +108,8 @@ class TokenInfo:
             "scope_configuration": self.scope_configuration.to_json(),
             "switchboard_configuration": self.switchboard_configuration.to_json(),
             "pyth_configuration": self.pyth_configuration.to_json(),
+            "block_price_usage": self.block_price_usage,
+            "reserved": self.reserved,
             "padding": self.padding,
         }
 
@@ -110,5 +130,7 @@ class TokenInfo:
             pyth_configuration=pyth_configuration.PythConfiguration.from_json(
                 obj["pyth_configuration"]
             ),
+            block_price_usage=obj["block_price_usage"],
+            reserved=obj["reserved"],
             padding=obj["padding"],
         )

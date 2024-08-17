@@ -4,7 +4,18 @@ from solders.pubkey import Pubkey
 from anchorpy import Program, Provider, Wallet, Idl
 from dataclasses import dataclass
 from based58 import b58encode
-from typing import Any, Dict, List, Optional, TypedDict, Union, Callable, Any, Coroutine, Sequence
+from typing import (
+    Any,
+    Dict,
+    List,
+    Optional,
+    TypedDict,
+    Union,
+    Callable,
+    Any,
+    Coroutine,
+    Sequence,
+)
 import os
 import requests, json, datetime, logging
 from requests.exceptions import RequestException
@@ -34,7 +45,7 @@ OBLIGATION_SIZE = Obligation.layout.sizeof() + DISCRIMINATOR_SIZE  # 3344
 SCALE_FACTOR_60 = 2**60
 LAMPORTS_MULTIPLIER = 10**-9
 
-SLOTS_PER_SECOND = 1000 / 450 # approx 450ms per epoch
+SLOTS_PER_SECOND = 1000 / 450  # approx 450ms per epoch
 SLOTS_PER_MINUTE = SLOTS_PER_SECOND * 60
 SLOTS_PER_HOUR = SLOTS_PER_MINUTE * 60
 SLOTS_PER_DAY = SLOTS_PER_HOUR * 24
@@ -71,9 +82,7 @@ def get_kamino_lend_program(uri):
     provider = Provider(client, wallet)
     idl_filename = "kamino_lending.json"
     if os.path.isfile(f"./{idl_filename}"):
-        idl = Idl.from_json(
-            Path(f"./{idl_filename}").open().read()
-        )
+        idl = Idl.from_json(Path(f"./{idl_filename}").open().read())
     else:
         raise BaseException("IDL json file not found!")
     kamino_lend_program = Program(idl, KAMINOLEND_PROGRAM_ID, provider)
@@ -104,8 +113,8 @@ def object_to_dict(obj):
         return result
     else:
         return obj
-    
-    
+
+
 def get_str_from_byte_list(byte_list):
     byte_data = bytes(byte_list)
     # Decode bytes to string
@@ -237,8 +246,8 @@ async def get_loans_metrics(
         return obl_df5, obl_df, obl_df2, obl_df3, obl_df4
     else:
         return obl_df5
-    
-    
+
+
 def get_reserve_mint_decimals_map(reserves_configs):
     reserve_mint_decimals_map = {}
     for reserve_mint, reserve_config in reserves_configs.items():
@@ -476,6 +485,7 @@ def get_borrow_cumulative_borrow_rate(cumulative_borrow_rate_bsf):
         acc_sf += value
     return acc_sf / 2**60
 
+
 def get_token_reserve_to_token_mint_map(reserves_configs):
     return {
         str(reserves_configs[token_mint]["public_key"]): token_mint
@@ -518,6 +528,7 @@ def check_for_dup_borrows_deposits_keys_in_list(obl_df_in):
         borrows_duplicate_keys = find_duplicate_keys(obl_df2.iloc[i].borrows_list)
         if borrows_duplicate_keys:
             raise ValueError(f"borrows_duplicate_keys = {borrows_duplicate_keys}")
+
 
 def merge_dicts(lst):
     merged_dict = {}
@@ -853,6 +864,7 @@ def get_deposit_borrow_token_amount_cols(loan_metrics_df):
 
 # IR CURVES
 
+
 def get_ir_curve(reserves_configs, token):
     borrow_curve_df = pd.DataFrame(
         reserves_configs[token]["account"]["config"]["borrow_rate_curve"]["points"]
@@ -1063,12 +1075,6 @@ def get_curr_util(reserve_config):
     )
 
     return 100 * numerator / denominator if denominator else None
-
-
-
-
-
-
 
 
 # SCOPE DATA FETCHING

@@ -7,6 +7,8 @@ from dataclasses import dataclass
 from construct import Container
 import borsh_construct as borsh
 
+# Release 1.6.2: no change
+
 
 class BorrowRateCurveJSON(typing.TypedDict):
     points: list[curve_point.CurvePointJSON]

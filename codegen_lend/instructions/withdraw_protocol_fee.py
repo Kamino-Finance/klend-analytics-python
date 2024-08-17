@@ -4,7 +4,7 @@ from solders.pubkey import Pubkey
 from spl.token.constants import TOKEN_PROGRAM_ID
 from solders.instruction import Instruction, AccountMeta
 import borsh_construct as borsh
-from codegen_lend.program_id import PROGRAM_ID
+from ..program_id import PROGRAM_ID
 
 
 class WithdrawProtocolFeeArgs(typing.TypedDict):
@@ -18,6 +18,7 @@ class WithdrawProtocolFeeAccounts(typing.TypedDict):
     lending_market_owner: Pubkey
     lending_market: Pubkey
     reserve: Pubkey
+    reserve_liquidity_mint: Pubkey
     lending_market_authority: Pubkey
     fee_vault: Pubkey
     lending_market_owner_ata: Pubkey
@@ -37,6 +38,9 @@ def withdraw_protocol_fee(
             pubkey=accounts["lending_market"], is_signer=False, is_writable=False
         ),
         AccountMeta(pubkey=accounts["reserve"], is_signer=False, is_writable=False),
+        AccountMeta(
+            pubkey=accounts["reserve_liquidity_mint"], is_signer=False, is_writable=True
+        ),
         AccountMeta(
             pubkey=accounts["lending_market_authority"],
             is_signer=False,

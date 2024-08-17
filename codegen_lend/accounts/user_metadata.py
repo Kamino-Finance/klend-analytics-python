@@ -8,13 +8,14 @@ from anchorpy.coder.accounts import ACCOUNT_DISCRIMINATOR_SIZE
 from anchorpy.error import AccountInvalidDiscriminator
 from anchorpy.utils.rpc import get_multiple_accounts
 from anchorpy.borsh_extension import BorshPubkey
-from codegen_lend.program_id import PROGRAM_ID
+from ..program_id import PROGRAM_ID
 
 
 class UserMetadataJSON(typing.TypedDict):
     referrer: str
     bump: int
     user_lookup_table: str
+    owner: str
     padding1: list[int]
     padding2: list[int]
 
@@ -26,12 +27,14 @@ class UserMetadata:
         "referrer" / BorshPubkey,
         "bump" / borsh.U64,
         "user_lookup_table" / BorshPubkey,
-        "padding1" / borsh.U64[55],
+        "owner" / BorshPubkey,
+        "padding1" / borsh.U64[51],
         "padding2" / borsh.U64[64],
     )
     referrer: Pubkey
     bump: int
     user_lookup_table: Pubkey
+    owner: Pubkey
     padding1: list[int]
     padding2: list[int]
 
@@ -82,6 +85,7 @@ class UserMetadata:
             referrer=dec.referrer,
             bump=dec.bump,
             user_lookup_table=dec.user_lookup_table,
+            owner=dec.owner,
             padding1=dec.padding1,
             padding2=dec.padding2,
         )
@@ -91,6 +95,7 @@ class UserMetadata:
             "referrer": str(self.referrer),
             "bump": self.bump,
             "user_lookup_table": str(self.user_lookup_table),
+            "owner": str(self.owner),
             "padding1": self.padding1,
             "padding2": self.padding2,
         }
@@ -101,6 +106,7 @@ class UserMetadata:
             referrer=Pubkey.from_string(obj["referrer"]),
             bump=obj["bump"],
             user_lookup_table=Pubkey.from_string(obj["user_lookup_table"]),
+            owner=Pubkey.from_string(obj["owner"]),
             padding1=obj["padding1"],
             padding2=obj["padding2"],
         )
