@@ -10,6 +10,9 @@ from anchorpy.utils.rpc import get_multiple_accounts
 from anchorpy.borsh_extension import BorshPubkey
 from codegen_lend.program_id import PROGRAM_ID
 
+# Changing this to adapt to Release 1.6.2
+# Nothing changed
+
 
 class ReferrerTokenStateJSON(typing.TypedDict):
     referrer: str

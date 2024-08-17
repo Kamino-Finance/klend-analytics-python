@@ -2,7 +2,18 @@ from __future__ import annotations
 import typing
 from dataclasses import dataclass
 from construct import Container
+from anchorpy.borsh_extension import BorshPubkey
 import borsh_construct as borsh
+
+
+# Adapting to release 1.6.2
+
+"""
+max_reserves_as_collateral: u8,
+padding_0: u8
+debt_reserve: Pubkey
+padding_1: u64[4]
+"""
 
 
 class ElevationGroupJSON(typing.TypedDict):
@@ -11,8 +22,9 @@ class ElevationGroupJSON(typing.TypedDict):
     ltv_pct: int
     liquidation_threshold_pct: int
     allow_new_loans: int
-    reserved: list[int]
-    padding: list[int]
+    max_reserves_as_collateral: int
+    padding_0: int
+    padding_1: list[int]
 
 
 @dataclass
@@ -23,16 +35,20 @@ class ElevationGroup:
         "ltv_pct" / borsh.U8,
         "liquidation_threshold_pct" / borsh.U8,
         "allow_new_loans" / borsh.U8,
-        "reserved" / borsh.U8[2],
-        "padding" / borsh.U64[8],
+        "max_reserves_as_collateral" / borsh.U8,
+        "padding_0" / borsh.U8,
+        "debt_reserve" / BorshPubkey,
+        "padding_1" / borsh.U64[4],
     )
     max_liquidation_bonus_bps: int
     id: int
     ltv_pct: int
     liquidation_threshold_pct: int
     allow_new_loans: int
-    reserved: list[int]
-    padding: list[int]
+    max_reserves_as_collateral: int
+    padding_0: int
+    debt_reserve: str
+    padding_1: list[int]
 
     @classmethod
     def from_decoded(cls, obj: Container) -> "ElevationGroup":
@@ -42,8 +58,10 @@ class ElevationGroup:
             ltv_pct=obj.ltv_pct,
             liquidation_threshold_pct=obj.liquidation_threshold_pct,
             allow_new_loans=obj.allow_new_loans,
-            reserved=obj.reserved,
-            padding=obj.padding,
+            max_reserves_as_collateral=obj.max_reserves_as_collateral,
+            padding_0=obj.padding_0,
+            debt_reserve=obj.debt_reserve,
+            padding_1=obj.padding_1,
         )
 
     def to_encodable(self) -> dict[str, typing.Any]:
@@ -53,8 +71,10 @@ class ElevationGroup:
             "ltv_pct": self.ltv_pct,
             "liquidation_threshold_pct": self.liquidation_threshold_pct,
             "allow_new_loans": self.allow_new_loans,
-            "reserved": self.reserved,
-            "padding": self.padding,
+            "max_reserves_as_collateral": self.max_reserves_as_collateral,
+            "padding_0": self.padding_0,
+            "debt_reserve": self.debt_reserve,
+            "padding_1": self.padding_1,
         }
 
     def to_json(self) -> ElevationGroupJSON:
@@ -64,8 +84,10 @@ class ElevationGroup:
             "ltv_pct": self.ltv_pct,
             "liquidation_threshold_pct": self.liquidation_threshold_pct,
             "allow_new_loans": self.allow_new_loans,
-            "reserved": self.reserved,
-            "padding": self.padding,
+            "max_reserves_as_collateral": self.max_reserves_as_collateral,
+            "padding_0": self.padding_0,
+            "debt_reserve": self.debt_reserve,
+            "padding_1": self.padding_1,
         }
 
     @classmethod
@@ -76,6 +98,8 @@ class ElevationGroup:
             ltv_pct=obj["ltv_pct"],
             liquidation_threshold_pct=obj["liquidation_threshold_pct"],
             allow_new_loans=obj["allow_new_loans"],
-            reserved=obj["reserved"],
-            padding=obj["padding"],
+            max_reserves_as_collateral=obj["max_reserves_as_collateral"],
+            padding_0=obj["padding_0"],
+            debt_reserve=obj["debt_reserve"],
+            padding_1=obj["padding_1"],
         )

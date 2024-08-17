@@ -11,25 +11,45 @@ from anchorpy.borsh_extension import BorshPubkey
 from codegen_lend.program_id import PROGRAM_ID
 import codegen_lend.lend_types as types
 
+# Changing this to adapt to Release 1.6.2
 
+"""
+Added
+borrowed_amount_outside_elevation_group
+borrowed_amounts_against_this_reserve_in_elevation_groups
+changing padding length
+"""
+
+
+# Done
+# TODO: check
 class ReserveJSON(typing.TypedDict):
     version: int
     last_update: types.last_update.LastUpdateJSON
     lending_market: str
+
     farm_collateral: str
     farm_debt: str
+
     liquidity: types.reserve_liquidity.ReserveLiquidityJSON
     reserve_liquidity_padding: list[int]
+
     collateral: types.reserve_collateral.ReserveCollateralJSON
     reserve_collateral_padding: list[int]
+
     config: types.reserve_config.ReserveConfigJSON
     config_padding: list[int]
+
+    borrowed_amount_outside_elevation_group: int
+    borrowed_amounts_against_this_reserve_in_elevation_groups: int
+
     padding: list[int]
 
 
 @dataclass
 class Reserve:
     discriminator: typing.ClassVar = b"+\xf2\xcc\xca\x1a\xf7;\x7f"
+
     layout: typing.ClassVar = borsh.CStruct(
         "version" / borsh.U64,
         "last_update" / types.last_update.LastUpdate.layout,
@@ -41,8 +61,10 @@ class Reserve:
         "collateral" / types.reserve_collateral.ReserveCollateral.layout,
         "reserve_collateral_padding" / borsh.U64[150],
         "config" / types.reserve_config.ReserveConfig.layout,
-        "config_padding" / borsh.U64[150],
-        "padding" / borsh.U64[240],
+        "config_padding" / borsh.U64[117],
+        "borrowed_amount_outside_elevation_group" / borsh.U64,
+        "borrowed_amounts_against_this_reserve_in_elevation_groups" / borsh.U64[32],
+        "padding" / borsh.U64[207],
     )
     version: int
     last_update: types.last_update.LastUpdate
@@ -55,6 +77,8 @@ class Reserve:
     reserve_collateral_padding: list[int]
     config: types.reserve_config.ReserveConfig
     config_padding: list[int]
+    borrowed_amount_outside_elevation_group: int
+    borrowed_amounts_against_this_reserve_in_elevation_groups: list[int]
     padding: list[int]
 
     @classmethod
@@ -116,6 +140,8 @@ class Reserve:
             reserve_collateral_padding=dec.reserve_collateral_padding,
             config=types.reserve_config.ReserveConfig.from_decoded(dec.config),
             config_padding=dec.config_padding,
+            borrowed_amount_outside_elevation_group=dec.borrowed_amount_outside_elevation_group,
+            borrowed_amounts_against_this_reserve_in_elevation_groups=dec.borrowed_amounts_against_this_reserve_in_elevation_groups,
             padding=dec.padding,
         )
 
@@ -132,6 +158,8 @@ class Reserve:
             "reserve_collateral_padding": self.reserve_collateral_padding,
             "config": self.config.to_json(),
             "config_padding": self.config_padding,
+            "borrowed_amount_outside_elevation_group": self.borrowed_amount_outside_elevation_group,
+            "borrowed_amounts_against_this_reserve_in_elevation_groups": self.borrowed_amounts_against_this_reserve_in_elevation_groups,
             "padding": self.padding,
         }
 
@@ -153,5 +181,11 @@ class Reserve:
             reserve_collateral_padding=obj["reserve_collateral_padding"],
             config=types.reserve_config.ReserveConfig.from_json(obj["config"]),
             config_padding=obj["config_padding"],
+            borrowed_amount_outside_elevation_group=obj[
+                "borrowed_amount_outside_elevation_group"
+            ],
+            borrowed_amounts_against_this_reserve_in_elevation_groups=obj[
+                "borrowed_amounts_against_this_reserve_in_elevation_groups"
+            ],
             padding=obj["padding"],
         )

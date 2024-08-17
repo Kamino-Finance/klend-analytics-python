@@ -6,6 +6,8 @@ from solders.pubkey import Pubkey
 from anchorpy.borsh_extension import BorshPubkey
 import borsh_construct as borsh
 
+# Release 1.6.2: No change
+
 
 class ReserveCollateralJSON(typing.TypedDict):
     mint_pubkey: str

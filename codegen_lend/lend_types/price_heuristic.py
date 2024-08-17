@@ -4,6 +4,8 @@ from dataclasses import dataclass
 from construct import Container
 import borsh_construct as borsh
 
+# Release 1.6.2: No change
+
 
 class PriceHeuristicJSON(typing.TypedDict):
     lower: int

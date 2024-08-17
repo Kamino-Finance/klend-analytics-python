@@ -4,6 +4,9 @@ from dataclasses import dataclass
 from construct import Container
 import borsh_construct as borsh
 
+# Adapted to release 1.6.2
+# No change
+
 
 class BigFractionBytesJSON(typing.TypedDict):
     value: list[int]

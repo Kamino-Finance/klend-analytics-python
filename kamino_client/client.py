@@ -65,4 +65,3 @@ class KaminoClient:
             extra,
         )
         return None
-    

@@ -11,6 +11,17 @@ from anchorpy.borsh_extension import BorshPubkey
 from codegen_lend.program_id import PROGRAM_ID
 import codegen_lend.lend_types as types
 
+# Updating for release 1.6.2
+
+"""
+Changelog
+Added:
+num_of_obsolete_reserves
+has_debt
+borrowing_disabled
+highest_borrow_factor_pct
+"""
+
 
 class ObligationJSON(typing.TypedDict):
     tag: int
@@ -20,16 +31,22 @@ class ObligationJSON(typing.TypedDict):
     deposits: list[types.obligation_collateral.ObligationCollateralJSON]
     lowest_reserve_deposit_ltv: int
     deposited_value_sf: int
+
     borrows: list[types.obligation_liquidity.ObligationLiquidityJSON]
     borrow_factor_adjusted_debt_value_sf: int
     borrowed_assets_market_value_sf: int
     allowed_borrow_value_sf: int
     unhealthy_borrow_value_sf: int
+
     deposits_asset_tiers: list[int]
     borrows_asset_tiers: list[int]
     elevation_group: int
-    reserved: list[int]
+    num_of_obsolete_reserves: int
+    has_debt: int
     referrer: str
+    borrowing_disabled: int
+    reserved: list[int]
+    highest_borrow_factor_pct: int
     padding3: list[int]
 
 
@@ -42,7 +59,7 @@ class Obligation:
         "lending_market" / BorshPubkey,
         "owner" / BorshPubkey,
         "deposits" / types.obligation_collateral.ObligationCollateral.layout[8],
-        "lowest_reserve_deposit_ltv" / borsh.U64,
+        "lowest_reserve_deposit_liquidation_ltv" / borsh.U64,
         "deposited_value_sf" / borsh.U128,
         "borrows" / types.obligation_liquidity.ObligationLiquidity.layout[5],
         "borrow_factor_adjusted_debt_value_sf" / borsh.U128,
@@ -52,9 +69,13 @@ class Obligation:
         "deposits_asset_tiers" / borsh.U8[8],
         "borrows_asset_tiers" / borsh.U8[5],
         "elevation_group" / borsh.U8,
-        "reserved" / borsh.U8[2],
+        "num_of_obsolete_reserves" / borsh.U8,
+        "has_debt" / borsh.U8,
         "referrer" / BorshPubkey,
-        "padding3" / borsh.U64[128],
+        "borrowing_disabled" / borsh.U8,
+        "reserved" / borsh.U8[7],
+        "highest_borrow_factor_pct" / borsh.U64,
+        "padding3" / borsh.U64[126],
     )
     tag: int
     last_update: types.last_update.LastUpdate
@@ -63,16 +84,23 @@ class Obligation:
     deposits: list[types.obligation_collateral.ObligationCollateral]
     lowest_reserve_deposit_ltv: int
     deposited_value_sf: int
+
     borrows: list[types.obligation_liquidity.ObligationLiquidity]
     borrow_factor_adjusted_debt_value_sf: int
     borrowed_assets_market_value_sf: int
     allowed_borrow_value_sf: int
     unhealthy_borrow_value_sf: int
+
     deposits_asset_tiers: list[int]
     borrows_asset_tiers: list[int]
+
     elevation_group: int
-    reserved: list[int]
+    num_of_obsolete_reserves: int
+    has_debt: int
     referrer: Pubkey
+    borrowing_disabled: int
+    reserved: list[int]
+    highest_borrow_factor_pct: int
     padding3: list[int]
 
     @classmethod
@@ -148,8 +176,12 @@ class Obligation:
             deposits_asset_tiers=dec.deposits_asset_tiers,
             borrows_asset_tiers=dec.borrows_asset_tiers,
             elevation_group=dec.elevation_group,
-            reserved=dec.reserved,
+            num_of_obsolete_reserves=dec.num_of_obsolete_reserves,
+            has_debt=dec.has_debt,
             referrer=dec.referrer,
+            borrowing_disabled=dec.borrowing_disabled,
+            reserved=dec.reserved,
+            highest_borrow_factor_pct=dec.highest_borrow_factor_pct,
             padding3=dec.padding3,
         )
 
@@ -170,8 +202,12 @@ class Obligation:
             "deposits_asset_tiers": self.deposits_asset_tiers,
             "borrows_asset_tiers": self.borrows_asset_tiers,
             "elevation_group": self.elevation_group,
-            "reserved": self.reserved,
+            "num_of_obsolete_reserves": self.num_of_obsolete_reserves,
+            "has_debt": self.has_debt,
             "referrer": str(self.referrer),
+            "borrowing_disabled": self.borrowing_disabled,
+            "reserved": self.reserved,
+            "highest_borrow_factor_pct": self.highest_borrow_factor_pct,
             "padding3": self.padding3,
         }
 
@@ -209,7 +245,11 @@ class Obligation:
             deposits_asset_tiers=obj["deposits_asset_tiers"],
             borrows_asset_tiers=obj["borrows_asset_tiers"],
             elevation_group=obj["elevation_group"],
-            reserved=obj["reserved"],
+            num_of_obsolete_reserves=obj["num_of_obsolete_reserves"],
+            has_debt=obj["has_debt"],
             referrer=Pubkey.from_string(obj["referrer"]),
+            borrowing_disabled=obj["borrowing_disabled"],
+            reserved=obj["reserved"],
+            highest_borrow_factor_pct=obj["highest_borrow_factor_pct"],
             padding3=obj["padding3"],
         )

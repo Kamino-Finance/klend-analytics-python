@@ -4,32 +4,59 @@ from dataclasses import dataclass
 from construct import Container
 import borsh_construct as borsh
 
+# Adapting to release 1.6.2
+
 
 class LastUpdateJSON(typing.TypedDict):
     slot: int
     stale: bool
+    price_status: int
     placeholder: list[int]
 
 
 @dataclass
 class LastUpdate:
     layout: typing.ClassVar = borsh.CStruct(
-        "slot" / borsh.U64, "stale" / borsh.Bool, "placeholder" / borsh.U8[7]
+        "slot" / borsh.U64,
+        "stale" / borsh.Bool,
+        "price_status" / borsh.U8,
+        "placeholder" / borsh.U8[6],
     )
     slot: int
     stale: bool
+    price_status: int
     placeholder: list[int]
 
     @classmethod
     def from_decoded(cls, obj: Container) -> "LastUpdate":
-        return cls(slot=obj.slot, stale=obj.stale, placeholder=obj.placeholder)
+        return cls(
+            slot=obj.slot,
+            stale=obj.stale,
+            price_status=obj.price_status,
+            placeholder=obj.placeholder,
+        )
 
     def to_encodable(self) -> dict[str, typing.Any]:
-        return {"slot": self.slot, "stale": self.stale, "placeholder": self.placeholder}
+        return {
+            "slot": self.slot,
+            "stale": self.stale,
+            "price_status": self.price_status,
+            "placeholder": self.placeholder,
+        }
 
     def to_json(self) -> LastUpdateJSON:
-        return {"slot": self.slot, "stale": self.stale, "placeholder": self.placeholder}
+        return {
+            "slot": self.slot,
+            "stale": self.stale,
+            "price_status": self.price_status,
+            "placeholder": self.placeholder,
+        }
 
     @classmethod
     def from_json(cls, obj: LastUpdateJSON) -> "LastUpdate":
-        return cls(slot=obj["slot"], stale=obj["stale"], placeholder=obj["placeholder"])
+        return cls(
+            slot=obj["slot"],
+            stale=obj["stale"],
+            price_status=obj["price_status"],
+            placeholder=obj["placeholder"],
+        )
