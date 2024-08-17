@@ -10,3 +10,6 @@ external_klend_fetch_data.ipynb
 
 Kamino Lend IDL:
 kamino_lending.json
+
+#### Changelog
+Updated codegen_lend to work with the IDL of release 1.6.2
